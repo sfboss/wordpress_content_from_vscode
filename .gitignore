@@ -1,0 +1,10 @@
+.DS_Store
+.venv/
+.deps/
+__pycache__/
+.pytest_cache/
+*.pyc
+websites/*/.env
+websites/*/.wp-factory/
+websites/*/media_out/
+reports/

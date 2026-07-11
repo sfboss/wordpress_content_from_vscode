@@ -1,0 +1,86 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Factory: 1 - Setup Python",
+      "type": "shell",
+      "command": "python3 -m venv .venv && .venv/bin/python -m pip install --upgrade pip && .venv/bin/python -m pip install -e '.[dev]'",
+      "problemMatcher": []
+    },
+    {
+      "label": "Factory: 2 - Test connection",
+      "type": "shell",
+      "command": ".venv/bin/python -m wp_factory doctor --site '${input:site}'",
+      "problemMatcher": []
+    },
+    {
+      "label": "Factory: 3 - Lint Markdown",
+      "type": "shell",
+      "command": ".venv/bin/python -m wp_factory lint --site '${input:site}'",
+      "problemMatcher": []
+    },
+    {
+      "label": "Factory: 4 - Preview sync plan",
+      "type": "shell",
+      "command": ".venv/bin/python -m wp_factory plan --site '${input:site}'",
+      "problemMatcher": []
+    },
+    {
+      "label": "Factory: 5 - Push site",
+      "type": "shell",
+      "command": ".venv/bin/python -m wp_factory push --site '${input:site}'",
+      "problemMatcher": []
+    },
+    {
+      "label": "Factory: Pull safe remote changes",
+      "type": "shell",
+      "command": ".venv/bin/python -m wp_factory pull --site '${input:site}'",
+      "problemMatcher": []
+    },
+    {
+      "label": "Factory: Verify live records",
+      "type": "shell",
+      "command": ".venv/bin/python -m wp_factory verify --site '${input:site}'",
+      "problemMatcher": []
+    },
+    {
+      "label": "Factory: Plan all sites",
+      "type": "shell",
+      "command": ".venv/bin/python -m wp_factory plan --all",
+      "problemMatcher": []
+    },
+    {
+      "label": "Factory: Push all sites",
+      "type": "shell",
+      "command": ".venv/bin/python -m wp_factory push --all",
+      "problemMatcher": []
+    },
+    {
+      "label": "Factory: Create another site folder",
+      "type": "shell",
+      "command": ".venv/bin/python -m wp_factory new-site '${input:newSite}'",
+      "problemMatcher": []
+    },
+    {
+      "label": "Factory: Run tests",
+      "type": "shell",
+      "command": ".venv/bin/python -m pytest -q",
+      "problemMatcher": []
+    }
+  ],
+  "inputs": [
+    {
+      "id": "site",
+      "type": "promptString",
+      "description": "Folder name under websites/",
+      "default": "example.com"
+    },
+    {
+      "id": "newSite",
+      "type": "promptString",
+      "description": "New domain folder (for example blog.example.com)",
+      "default": "new-domain.com"
+    }
+  ]
+}
+

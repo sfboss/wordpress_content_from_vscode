@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "wordpress-content-factory"
+version = "0.1.0"
+description = "Manage multiple WordPress sites as Markdown folders from VS Code."
+requires-python = ">=3.11"
+dependencies = [
+  "beautifulsoup4>=4.13,<5",
+  "markdown-it-py[linkify]>=3.0,<4",
+  "markdownify>=1.1,<2",
+  "mdit-py-plugins>=0.4,<1",
+  "Pillow>=11,<13",
+  "python-dotenv>=1.1,<2",
+  "python-frontmatter>=1.1,<2",
+  "PyYAML>=6,<7",
+  "requests>=2.32,<3",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8,<9"]
+
+[tool.setuptools.packages.find]
+include = ["wp_factory*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+

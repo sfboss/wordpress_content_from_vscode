@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#f5f7fa"/>
+  <rect x="90" y="165" width="380" height="300" rx="28" fill="#1f2937"/>
+  <circle cx="130" cy="205" r="9" fill="#ef4444"/>
+  <circle cx="160" cy="205" r="9" fill="#f59e0b"/>
+  <circle cx="190" cy="205" r="9" fill="#22c55e"/>
+  <text x="135" y="295" font-family="Arial, sans-serif" font-size="48" font-weight="700" fill="#ffffff">Markdown</text>
+  <text x="135" y="355" font-family="monospace" font-size="26" fill="#93c5fd">post.md + image.png</text>
+  <path d="M510 315h150" stroke="#2563eb" stroke-width="22" stroke-linecap="round"/>
+  <path d="M635 270l55 45-55 45" fill="none" stroke="#2563eb" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="900" cy="315" r="170" fill="#21759b"/>
+  <text x="900" y="340" text-anchor="middle" font-family="Georgia, serif" font-size="170" font-weight="700" fill="#ffffff">W</text>
+  <text x="600" y="560" text-anchor="middle" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#111827">VS Code → REST API → WordPress</text>
+</svg>

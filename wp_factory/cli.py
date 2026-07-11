@@ -1,0 +1,129 @@
+from __future__ import annotations
+
+import argparse
+import json
+import shutil
+import sys
+from dataclasses import asdict
+from pathlib import Path
+
+import yaml
+
+from .config import WEBSITES_DIR, list_site_keys, load_site
+from .errors import FactoryError
+from .reporting import notify_slack, plan_dict, result_dict, write_report
+from .sync import SiteSync
+
+
+def _parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(prog="wp-factory", description="Markdown to WordPress content sync")
+    sub = parser.add_subparsers(dest="command", required=True)
+    for name in ("doctor", "lint", "plan", "push", "pull", "verify"):
+        command = sub.add_parser(name)
+        target = command.add_mutually_exclusive_group(required=True)
+        target.add_argument("--site", help="Folder under websites/")
+        target.add_argument("--all", action="store_true", help="Run every configured site")
+        if name == "push":
+            command.add_argument("--force", action="store_true", help="Overwrite a detected edit conflict")
+    create = sub.add_parser("new-site", help="Create another domain scaffold")
+    create.add_argument("domain")
+    return parser
+
+
+def _sites(args: argparse.Namespace) -> list[str]:
+    keys = list_site_keys() if args.all else [args.site]
+    if not keys:
+        raise FactoryError("No site.yaml files found under websites/.")
+    return keys
+
+
+def _print_rows(rows: list[dict]) -> None:
+    if not rows:
+        print("No rows.")
+        return
+    width = max(len(str(row.get("action", ""))) for row in rows)
+    for row in rows:
+        marker = "OK" if row.get("ok", True) else "FAIL"
+        print(f"{marker:4} {str(row.get('action', '')):<{width}}  {row.get('key', row.get('site', ''))}  {row.get('message', row.get('reason', ''))}")
+
+
+def _new_site(domain: str) -> int:
+    safe = domain.strip().lower().removeprefix("https://").removeprefix("http://").strip("/")
+    if not safe or "/" in safe or ".." in safe:
+        raise FactoryError("Use only a domain folder name, such as blog.example.com")
+    source = WEBSITES_DIR / "example.com"
+    destination = WEBSITES_DIR / safe
+    if destination.exists():
+        raise FactoryError(f"Already exists: {destination}")
+    shutil.copytree(source, destination, ignore=shutil.ignore_patterns(".wp-factory", "media_out"))
+    config_path = destination / "site.yaml"
+    config = yaml.safe_load(config_path.read_text(encoding="utf-8"))
+    config["site"]["name"] = safe
+    config["site"]["url"] = f"https://{safe}"
+    config_path.write_text(yaml.safe_dump(config, sort_keys=False), encoding="utf-8")
+    for name in (".env", ".env.example"):
+        env_path = destination / name
+        env_path.write_text(
+            env_path.read_text(encoding="utf-8").replace("https://example.com", f"https://{safe}"),
+            encoding="utf-8",
+        )
+    print(f"Created websites/{safe}. Edit websites/{safe}/.env, then run the connection task.")
+    return 0
+
+
+def _run_site(command: str, key: str, args: argparse.Namespace) -> bool:
+    require_credentials = command not in {"lint"}
+    site = load_site(key, require_credentials=require_credentials)
+    sync = SiteSync(site)
+    print(f"\n[{site.key}] {command}")
+    if command == "doctor":
+        data = sync.doctor()
+        print(json.dumps(data, indent=2))
+        report = write_report(site, command, data)
+        return True
+    if command == "lint":
+        issues = sync.lint()
+        failures = [item for item in issues if "warning:" not in item]
+        for issue in issues:
+            print(("WARN " if "warning:" in issue else "FAIL ") + issue)
+        if not issues:
+            print("OK Markdown and local image references passed.")
+        write_report(site, command, {"issues": issues})
+        return not failures
+    if command == "plan":
+        rows = [plan_dict(item) for item in sync.plan()]
+        _print_rows(rows)
+        report = write_report(site, command, rows)
+        notify_slack(site, command, rows, report)
+        return not any(row["action"] == "conflict" for row in rows)
+    if command == "push":
+        rows = [result_dict(item) for item in sync.push(force=args.force)]
+    elif command == "pull":
+        rows = [result_dict(item) for item in sync.pull()]
+    elif command == "verify":
+        rows = [result_dict(item) for item in sync.verify()]
+    else:
+        raise FactoryError(f"Unknown command: {command}")
+    _print_rows(rows)
+    report = write_report(site, command, rows)
+    print(f"Report: {report.relative_to(Path.cwd()) if Path.cwd() in report.parents else report}")
+    notify_slack(site, command, rows, report)
+    return all(row["ok"] for row in rows)
+
+
+def main(argv: list[str] | None = None) -> int:
+    args = _parser().parse_args(argv)
+    try:
+        if args.command == "new-site":
+            return _new_site(args.domain)
+        ok = True
+        for key in _sites(args):
+            try:
+                ok = _run_site(args.command, key, args) and ok
+            except FactoryError as exc:
+                print(f"ERROR [{key}] {exc}", file=sys.stderr)
+                ok = False
+        return 0 if ok else 1
+    except FactoryError as exc:
+        print(f"ERROR {exc}", file=sys.stderr)
+        return 1

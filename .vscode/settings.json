@@ -1,0 +1,21 @@
+{
+  "files.exclude": {
+    "**/__pycache__": true,
+    "**/.pytest_cache": true,
+    "**/.wp-factory": true
+  },
+  "files.trimTrailingWhitespace": true,
+  "[markdown]": {
+    "files.trimTrailingWhitespace": false
+  },
+  "markdown.copyFiles.destination": {
+    "/websites/*/content/posts/**/*": "images/${documentBaseName}/",
+    "/websites/*/content/pages/**/*": "images/${documentBaseName}/"
+  },
+  "markdown.validate.enabled": true,
+  "markdown.updateLinksOnFileMove.enabled": "prompt",
+  "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
+  "yaml.schemas": {
+    "./site.schema.json": "websites/*/site.yaml"
+  }
+}

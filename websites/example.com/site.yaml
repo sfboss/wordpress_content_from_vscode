@@ -1,0 +1,25 @@
+site:
+  name: Example Site
+  url: https://example.com
+  api_path: /wp-json/wp/v2
+  default_status: draft
+  timeout_seconds: 30
+  verify_public_urls: true
+
+content:
+  strict_alt_text: true
+  delete_remote: false
+
+media:
+  max_width: 1920
+  jpeg_quality: 85
+  convert_to_webp: false
+
+seo:
+  # Core WordPress supports title, slug, excerpt, headings, links, image alt text,
+  # and semantic HTML. Plugin-specific meta needs a later REST adapter.
+  plugin_adapter: none
+
+notifications:
+  slack: optional
+

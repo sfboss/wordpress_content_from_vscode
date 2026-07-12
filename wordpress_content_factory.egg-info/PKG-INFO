@@ -1,0 +1,16 @@
+Metadata-Version: 2.4
+Name: wordpress-content-factory
+Version: 0.1.0
+Summary: Manage multiple WordPress sites as Markdown folders from VS Code.
+Requires-Python: >=3.11
+Requires-Dist: beautifulsoup4<5,>=4.13
+Requires-Dist: markdown-it-py[linkify]<4,>=3.0
+Requires-Dist: markdownify<2,>=1.1
+Requires-Dist: mdit-py-plugins<1,>=0.4
+Requires-Dist: Pillow<13,>=11
+Requires-Dist: python-dotenv<2,>=1.1
+Requires-Dist: python-frontmatter<2,>=1.1
+Requires-Dist: PyYAML<7,>=6
+Requires-Dist: requests<3,>=2.32
+Provides-Extra: dev
+Requires-Dist: pytest<9,>=8; extra == "dev"

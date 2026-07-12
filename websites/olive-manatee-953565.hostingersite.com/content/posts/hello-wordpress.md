@@ -45,7 +45,7 @@ This paragraph includes **bold**, *italic*, ~~strikethrough~~, `inline code`, an
 
 ## Image
 
-![Diagram showing Markdown moving from VS Code into WordPress](../media/content-workflow.png "VS Code to WordPress")
+![Diagram showing Markdown moving from VS Code into WordPress](./../media/content-workflow.png "VS Code to WordPress")
 
 ## Code
 

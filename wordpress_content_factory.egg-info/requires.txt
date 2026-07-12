@@ -1,0 +1,12 @@
+beautifulsoup4<5,>=4.13
+markdown-it-py[linkify]<4,>=3.0
+markdownify<2,>=1.1
+mdit-py-plugins<1,>=0.4
+Pillow<13,>=11
+python-dotenv<2,>=1.1
+python-frontmatter<2,>=1.1
+PyYAML<7,>=6
+requests<3,>=2.32
+
+[dev]
+pytest<9,>=8

@@ -1,6 +1,6 @@
 site:
-  name: Example Site
-  url: https://example.com
+  name: Factory
+  url: "https://olive-manatee-953565.hostingersite.com"
   api_path: /wp-json/wp/v2
   default_status: draft
   timeout_seconds: 30

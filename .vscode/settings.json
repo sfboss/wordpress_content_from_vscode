@@ -17,5 +17,6 @@
   "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
   "yaml.schemas": {
     "./site.schema.json": "websites/*/site.yaml"
-  }
+  },
+  "python.terminal.useEnvFile": true
 }

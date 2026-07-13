@@ -10,3 +10,4 @@ requests<3,>=2.32
 
 [dev]
 pytest<9,>=8
+pytest-cov<7,>=5

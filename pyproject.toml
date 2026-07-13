@@ -20,11 +20,14 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = ["pytest>=8,<9"]
+dev = ["pytest>=8,<9", "pytest-cov>=5,<7"]
 
 [tool.setuptools.packages.find]
 include = ["wp_factory*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+markers = [
+  "live: optional tests requiring a designated external WordPress site",
+]
 

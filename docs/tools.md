@@ -67,23 +67,7 @@ Every run writes a JSON artifact under `reports/<site>/`, matching the existing 
 2. **Batch safe by default.** The same runner accepts no target to process the whole site.
 3. **Reports before mutation.** Tools produce findings and next steps first; future patching should be an explicit mode.
 4. **Shared content API.** Tools reuse `load_documents`, site config, reports, and image resolution instead of duplicating sync logic.
-<<<<<<< ours
-<<<<<<< ours
-<<<<<<< ours
-<<<<<<< ours
-5. **Composable jobs.** Image import, alt text, internal links, external links, SEO, readability, overlap detection, schema, and dashboard KPIs remain separate tasks so failures are isolated.
-=======
 5. **Composable jobs.** Image import, alt text, internal links, external links, SEO, readability, schema, inventory, calendar, refresh planning, and dashboard KPIs remain separate tasks so failures are isolated.
->>>>>>> theirs
-=======
-5. **Composable jobs.** Image import, alt text, internal links, external links, SEO, readability, schema, inventory, calendar, refresh planning, and dashboard KPIs remain separate tasks so failures are isolated.
->>>>>>> theirs
-=======
-5. **Composable jobs.** Image import, alt text, internal links, external links, SEO, readability, schema, inventory, calendar, refresh planning, and dashboard KPIs remain separate tasks so failures are isolated.
->>>>>>> theirs
-=======
-5. **Composable jobs.** Image import, alt text, internal links, external links, SEO, readability, schema, inventory, calendar, refresh planning, and dashboard KPIs remain separate tasks so failures are isolated.
->>>>>>> theirs
 
 ## Tool contract
 

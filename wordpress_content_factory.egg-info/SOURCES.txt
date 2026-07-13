@@ -2,6 +2,8 @@ README.md
 pyproject.toml
 tests/test_content_and_plan.py
 tests/test_markdown_engine.py
+tests/test_tools.py
+tests/test_vscode_tasks.py
 wordpress_content_factory.egg-info/PKG-INFO
 wordpress_content_factory.egg-info/SOURCES.txt
 wordpress_content_factory.egg-info/dependency_links.txt
@@ -12,11 +14,16 @@ wp_factory/__main__.py
 wp_factory/cli.py
 wp_factory/config.py
 wp_factory/content.py
+wp_factory/content_overlap.py
+wp_factory/dashboard.py
 wp_factory/errors.py
+wp_factory/featured_images.py
 wp_factory/markdown_engine.py
 wp_factory/models.py
 wp_factory/reporting.py
+wp_factory/seo_tools.py
 wp_factory/state.py
 wp_factory/sync.py
+wp_factory/tools.py
 wp_factory/utils.py
 wp_factory/wordpress.py

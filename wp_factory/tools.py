@@ -159,14 +159,6 @@ def _doc_date(doc: Document) -> date | None:
     return None
 
 
-<<<<<<< ours
-<<<<<<< ours
-def run_content_inventory(site: SiteConfig, target: Path | None = None) -> dict[str, Any]:
-    docs, issues = load_tool_documents(site)
-    scoped = _target_docs(site, target)
-=======
-=======
->>>>>>> theirs
 def _categories(doc: Document) -> list[str]:
     value = doc.metadata.get("categories")
     if isinstance(value, list):
@@ -183,10 +175,7 @@ def _has_excerpt(doc: Document) -> bool:
 def run_content_inventory(site: SiteConfig, target: Path | None = None) -> dict[str, Any]:
     docs, issues = load_tool_documents(site)
     scoped = _filter_target_docs(docs, target)
-<<<<<<< ours
->>>>>>> theirs
-=======
->>>>>>> theirs
+ 
     slug_counts = Counter(d.slug for d in docs)
     title_counts = Counter(d.title.strip().lower() for d in docs)
     category_counts: Counter[str] = Counter()
@@ -195,15 +184,8 @@ def run_content_inventory(site: SiteConfig, target: Path | None = None) -> dict[
     rows = []
     for doc in scoped:
         words = len(WORD_RE.findall(doc.markdown))
-<<<<<<< ours
-<<<<<<< ours
-        cats = doc.metadata.get("categories") if isinstance(doc.metadata.get("categories"), list) else []
-=======
         cats = _categories(doc)
->>>>>>> theirs
-=======
         cats = _categories(doc)
->>>>>>> theirs
         category_counts.update(str(c) for c in cats)
         status_counts.update([doc.status])
         collection_counts.update([doc.collection])
@@ -216,15 +198,8 @@ def run_content_inventory(site: SiteConfig, target: Path | None = None) -> dict[
             flags.append("uncategorized")
         if words < (800 if doc.collection == "posts" else 300):
             flags.append("thin-content")
-<<<<<<< ours
-<<<<<<< ours
-        if not doc.metadata.get("excerpt") and not doc.metadata.get("meta_description"):
-=======
         if not _has_excerpt(doc):
->>>>>>> theirs
-=======
         if not _has_excerpt(doc):
->>>>>>> theirs
             flags.append("missing-excerpt")
         rows.append({"document": doc.key, "collection": doc.collection, "status": doc.status, "title": doc.title, "slug": doc.slug, "words": words, "categories": cats, "flags": flags})
     return {"tool": "content-inventory", "generated_at": datetime.now(UTC).isoformat(), "target": str(target) if target else "site", "summary": {"documents": len(rows), "collections": dict(collection_counts), "statuses": dict(status_counts), "categories": dict(category_counts), "flagged": sum(bool(r["flags"]) for r in rows), "duplicate_slugs": sum(1 for c in slug_counts.values() if c > 1)}, "documents": rows, "content_issues": issues}
@@ -243,7 +218,7 @@ def run_content_refresh(site: SiteConfig, target: Path | None = None) -> dict[st
             issues.append("missing-review-date")
         elif age_days is not None and age_days >= 180:
             issues.append("stale-review")
-        if re.search(r"\b(20[0-2][0-9]|last year|this year|recently|currently)\b", doc.markdown, re.I):
+        if re.seahttps://github.com/sfboss/wordpress_content_from_vscode/pull/1/conflict?name=wp_factory%252Ftools.py&ancestor_oid=059bc55a24e091b8f0e6eae3558f9a0bf2fda7a2&base_oid=a0a4ff328db79b97173daefa7e08fd3091f6b14d&head_oid=5ea18943db2a67ed19cd0857040430b46f73d22brch(r"\b(20[0-2][0-9]|last year|this year|recently|currently)\b", doc.markdown, re.I):
             issues.append("time-sensitive-language")
         if "TODO" in doc.markdown or "[UPDATE" in doc.markdown:
             issues.append("editorial-placeholder")
@@ -257,28 +232,13 @@ def run_editorial_calendar(site: SiteConfig, target: Path | None = None) -> dict
     rows = []
     for doc in _target_docs(site, target):
         planned = _meta_date(doc.metadata.get("date") or doc.metadata.get("publish_date"))
-<<<<<<< ours
-<<<<<<< ours
-        cats = doc.metadata.get("categories") if isinstance(doc.metadata.get("categories"), list) else []
-=======
         cats = _categories(doc)
->>>>>>> theirs
-=======
         cats = _categories(doc)
->>>>>>> theirs
         stage = "published" if doc.status == "publish" else "scheduled" if planned else "unscheduled"
         blockers = []
         if doc.collection == "posts" and not cats:
             blockers.append("category")
-<<<<<<< ours
-<<<<<<< ours
-        if not doc.metadata.get("excerpt") and not doc.metadata.get("meta_description"):
-=======
         if not _has_excerpt(doc):
->>>>>>> theirs
-=======
-        if not _has_excerpt(doc):
->>>>>>> theirs
             blockers.append("excerpt")
         rows.append({"document": doc.key, "title": doc.title, "collection": doc.collection, "status": doc.status, "planned_date": str(planned) if planned else None, "stage": stage, "categories": cats, "blockers": blockers})
     rows.sort(key=lambda r: (r["planned_date"] or "9999-99-99", r["document"]))
@@ -378,31 +338,18 @@ HTML_REPORT_TOOLS = {
     "schema-suggest",
     "publish-readiness",
     "featured-image-fixer",
-<<<<<<< ours
-<<<<<<< ours
-<<<<<<< ours
-<<<<<<< ours
-    "content-overlap",
-=======
     "content-inventory",
     "editorial-calendar",
     "content-refresh",
->>>>>>> theirs
-=======
     "content-inventory",
     "editorial-calendar",
     "content-refresh",
->>>>>>> theirs
-=======
     "content-inventory",
     "editorial-calendar",
     "content-refresh",
->>>>>>> theirs
-=======
     "content-inventory",
     "editorial-calendar",
     "content-refresh",
->>>>>>> theirs
 }
 
 

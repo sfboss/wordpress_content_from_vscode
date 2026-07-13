@@ -97,7 +97,7 @@ def make_tool_site(tmp_path: Path) -> SiteConfig:
 
 def test_tool_registry_lists_expected_tools():
     names = {tool["name"] for tool in list_tools()}
-    assert {
+    expected = {
         "image-fixer",
         "external-linker",
         "internal-linker",
@@ -108,24 +108,18 @@ def test_tool_registry_lists_expected_tools():
         "schema-suggest",
         "publish-readiness",
         "featured-image-fixer",
-<<<<<<< ours
-<<<<<<< ours
-<<<<<<< ours
-<<<<<<< ours
+    }
+    assert expected <= names
+    assert {
+        "seo-audit",
+        "featured-image-fixer",
+        "content-overlap",
+    } <= HTML_REPORT_TOOLS
         "content-overlap",
     } <= names
     assert "seo-audit" in HTML_REPORT_TOOLS
     assert "featured-image-fixer" in HTML_REPORT_TOOLS
     assert "content-overlap" in HTML_REPORT_TOOLS
-=======
-        "content-inventory",
-        "editorial-calendar",
-        "content-refresh",
-    } <= names
-    assert "seo-audit" in HTML_REPORT_TOOLS
-    assert "featured-image-fixer" in HTML_REPORT_TOOLS
-    assert "content-inventory" in HTML_REPORT_TOOLS
->>>>>>> theirs
 
 
 
@@ -144,10 +138,7 @@ def test_editorial_calendar_reports_unscheduled_blockers(tmp_path):
     assert payload["summary"]["unscheduled"] == 3
     beta = next(d for d in payload["calendar"] if d["document"].endswith("beta.md"))
     assert "category" in beta["blockers"]
-
-=======
-=======
->>>>>>> theirs
+ 
         "content-inventory",
         "editorial-calendar",
         "content-refresh",
@@ -155,18 +146,14 @@ def test_editorial_calendar_reports_unscheduled_blockers(tmp_path):
     assert "seo-audit" in HTML_REPORT_TOOLS
     assert "featured-image-fixer" in HTML_REPORT_TOOLS
     assert "content-inventory" in HTML_REPORT_TOOLS
-<<<<<<< ours
->>>>>>> theirs
+ 
 
 def test_content_refresh_prioritizes_missing_review_dates(tmp_path):
     site = make_tool_site(tmp_path)
     payload = run_content_refresh(site)
     assert payload["summary"]["high"] == 3
     assert payload["queue"][0]["priority"] == "high"
-=======
-
-
->>>>>>> theirs
+ 
 
 def test_content_inventory_flags_editorial_gaps(tmp_path):
     site = make_tool_site(tmp_path)
@@ -210,7 +197,6 @@ def test_editorial_calendar_reports_unscheduled_blockers(tmp_path):
     assert payload["summary"]["unscheduled"] == 3
     beta = next(d for d in payload["calendar"] if d["document"].endswith("beta.md"))
     assert "category" in beta["blockers"]
-=======
         "content-inventory",
         "editorial-calendar",
         "content-refresh",
@@ -218,9 +204,6 @@ def test_editorial_calendar_reports_unscheduled_blockers(tmp_path):
     assert "seo-audit" in HTML_REPORT_TOOLS
     assert "featured-image-fixer" in HTML_REPORT_TOOLS
     assert "content-inventory" in HTML_REPORT_TOOLS
-
-
->>>>>>> theirs
 
 def test_content_inventory_flags_editorial_gaps(tmp_path):
     site = make_tool_site(tmp_path)

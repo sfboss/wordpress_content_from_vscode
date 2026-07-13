@@ -82,7 +82,49 @@
     {
       "label": "Factory Tools: Site dashboard",
       "type": "shell",
-      "command": ".venv/bin/python -m wp_factory tools run site-dashboard --site '${input:site}'",
+      "command": ".venv/bin/python -m wp_factory tools run site-dashboard --site '${input:site}' --open",
+      "problemMatcher": []
+    },
+    {
+      "label": "Factory Tools: Featured images fix (site)",
+      "type": "shell",
+      "command": ".venv/bin/python -m wp_factory tools run featured-image-fixer --site '${input:site}' --open",
+      "problemMatcher": []
+    },
+    {
+      "label": "Factory Tools: Featured images then SEO audit",
+      "type": "shell",
+      "command": ".venv/bin/python -m wp_factory tools run featured-image-fixer --site '${input:site}' && .venv/bin/python -m wp_factory tools run seo-audit --site '${input:site}' --open",
+      "problemMatcher": []
+    },
+    {
+      "label": "Factory Tools: SEO audit (site)",
+      "type": "shell",
+      "command": ".venv/bin/python -m wp_factory tools run seo-audit --site '${input:site}' --open",
+      "problemMatcher": []
+    },
+    {
+      "label": "Factory Tools: Readability (site)",
+      "type": "shell",
+      "command": ".venv/bin/python -m wp_factory tools run readability --site '${input:site}' --open",
+      "problemMatcher": []
+    },
+    {
+      "label": "Factory Tools: Link health (site)",
+      "type": "shell",
+      "command": ".venv/bin/python -m wp_factory tools run link-health --site '${input:site}' --open",
+      "problemMatcher": []
+    },
+    {
+      "label": "Factory Tools: Schema suggest (site)",
+      "type": "shell",
+      "command": ".venv/bin/python -m wp_factory tools run schema-suggest --site '${input:site}' --open",
+      "problemMatcher": []
+    },
+    {
+      "label": "Factory Tools: Publish readiness (site)",
+      "type": "shell",
+      "command": ".venv/bin/python -m wp_factory tools run publish-readiness --site '${input:site}' --open",
       "problemMatcher": []
     },
     {
@@ -125,9 +167,15 @@
         "image-fixer",
         "external-linker",
         "internal-linker",
-        "site-dashboard"
+        "site-dashboard",
+        "featured-image-fixer",
+        "seo-audit",
+        "readability",
+        "link-health",
+        "schema-suggest",
+        "publish-readiness"
       ],
-      "default": "image-fixer"
+      "default": "featured-image-fixer"
     }
   ]
 }

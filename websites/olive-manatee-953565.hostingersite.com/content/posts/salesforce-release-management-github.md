@@ -1,5 +1,5 @@
 ---
-title: "Salesforce release management with GitHub: evidence, ownership, and control"
+title: 'Salesforce release management with GitHub: evidence, ownership, and control'
 slug: salesforce-release-management-github
 status: draft
 excerpt: Practice Salesforce release management with GitHub using reviewed commits, tags, CODEOWNERS, protected environments, CAB-friendly evidence, and controlled rollback.
@@ -19,7 +19,7 @@ images:
   ../media/salesforce-release-management-github-02.jpg:
     alt: GitHub release evidence pack with deploy id, SHA, reviewers, validation, and rollback tag
     title: Release evidence pack
-    caption: Auditors and operators both want the same package: who approved what, from which commit.
+    caption: 'Auditors and operators both want the same package: who approved what, from which commit.'
   ../media/salesforce-release-management-github-01.jpg:
     alt: Salesforce release chain from reviewed commits to production deploy
     title: Release evidence chain in GitHub

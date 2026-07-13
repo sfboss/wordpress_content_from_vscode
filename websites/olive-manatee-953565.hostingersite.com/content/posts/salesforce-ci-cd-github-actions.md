@@ -1,8 +1,8 @@
 ---
-title: "Salesforce CI/CD with GitHub Actions: a practical pipeline design"
+title: 'Salesforce CI/CD with GitHub Actions: a practical pipeline design'
 slug: salesforce-ci-cd-github-actions
 status: draft
-excerpt: Design salesforce ci cd github actions as a progressive pipeline: metadata snapshot, PR validation, dry-run gates, and controlled deploys without rushing production CD.
+excerpt: 'Design salesforce ci cd github actions as a progressive pipeline: metadata snapshot, PR validation, dry-run gates, and controlled deploys without rushing production CD.'
 categories:
 - github-automation
 tags:

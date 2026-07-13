@@ -1,8 +1,8 @@
 ---
-title: "Connect a Salesforce sandbox to GitHub: a safe first integration"
+title: 'Connect a Salesforce sandbox to GitHub: a safe first integration'
 slug: connect-salesforce-sandbox-to-github
 status: draft
-excerpt: Learn how to connect salesforce sandbox to github safely: DX project setup, auth, baseline retrieve, private repo, first snapshot, secrets, and production boundaries.
+excerpt: 'Learn how to connect salesforce sandbox to github safely: DX project setup, auth, baseline retrieve, private repo, first snapshot, secrets, and production boundaries.'
 categories:
 - github-automation
 tags:

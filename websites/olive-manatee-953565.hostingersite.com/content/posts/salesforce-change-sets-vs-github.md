@@ -1,8 +1,8 @@
 ---
-title: "Salesforce change sets vs GitHub: when source control replaces the old package path"
+title: 'Salesforce change sets vs GitHub: when source control replaces the old package path'
 slug: salesforce-change-sets-vs-github
 status: draft
-excerpt: Compare salesforce change sets vs github as release paths: what each handles well, when Git history wins, and how to migrate without a big-bang rewrite of your process.
+excerpt: 'Compare salesforce change sets vs github as release paths: what each handles well, when Git history wins, and how to migrate without a big-bang rewrite of your process.'
 categories:
 - salesforce-source-control
 tags:

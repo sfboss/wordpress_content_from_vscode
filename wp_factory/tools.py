@@ -9,7 +9,17 @@ from typing import Any, Callable
 
 from .config import ROOT, SiteConfig, list_site_keys, load_site
 from .content import COLLECTIONS, LOCAL_IMAGE_RE, load_documents, resolve_local_image
+from .dashboard import write_dashboard_html
 from .models import Document
+from .featured_images import run_featured_image_fixer
+from .seo_tools import (
+    run_link_health,
+    run_publish_readiness,
+    run_readability,
+    run_schema_suggest,
+    run_seo_audit,
+    write_tool_html,
+)
 from .utils import slugify, title_from_filename
 import frontmatter
 from .reporting import write_report
@@ -31,6 +41,10 @@ class ToolSpec:
 def load_tool_documents(site: SiteConfig) -> tuple[list[Document], list[dict[str, str]]]:
     documents: list[Document] = []
     issues: list[dict[str, str]] = []
+    # Prefer the featured-image-aware loader (YAML colon repair) so SEO tools
+    # keep seeing progress after fixer runs, without re-implementing parse logic.
+    from .featured_images import load_markdown_document
+
     for collection, spec in COLLECTIONS.items():
         directory = site.content_dir / spec["directory"]
         if not directory.exists():
@@ -39,7 +53,7 @@ def load_tool_documents(site: SiteConfig) -> tuple[list[Document], list[dict[str
             if path.name.lower() == "readme.md":
                 continue
             try:
-                post = frontmatter.load(path)
+                post, _raw, _repaired = load_markdown_document(path)
             except Exception as exc:  # report malformed content without blocking dashboards
                 issues.append({"path": path.relative_to(site.directory).as_posix(), "error": str(exc)})
                 continue
@@ -124,11 +138,73 @@ def _counts(rows: list[dict[str, Any]], key: str) -> dict[str, int]:
         counts[value] = counts.get(value, 0) + 1
     return counts
 
+def _with_docs(runner):
+    """Adapt seo_tools runners that need the document list to the ToolSpec signature."""
+
+    def wrapped(site: SiteConfig, target: Path | None = None) -> dict[str, Any]:
+        docs = _target_docs(site, target)
+        return runner(site, target, docs)
+
+    return wrapped
+
+
 TOOLS = {
     "image-fixer": ToolSpec("image-fixer", "Image Import + SEO Fixer", "Inventory local, remote, and data-uri images so each can be imported to WordPress with filename, metadata, and alt text.", True, run_image_fixer),
     "external-linker": ToolSpec("external-linker", "External Link Assistant", "Find pages/posts that need authoritative outbound links and surface entity/keyword candidates for review.", True, run_external_linker),
     "internal-linker": ToolSpec("internal-linker", "Internal Link Graph Assistant", "Evaluate cross-link coverage and suggest relevant local content to keep the site intertwined.", True, run_internal_linker),
     "site-dashboard": ToolSpec("site-dashboard", "Content Factory Dashboard", "Report whole-site content KPIs, category coverage, post depth, and first-run readiness baselines.", True, run_site_dashboard),
+    "seo-audit": ToolSpec(
+        "seo-audit",
+        "On-page SEO Audit",
+        "AIOSEO-style checks: title/meta length, focus keyphrase placement, slug quality, H2 structure, featured image, depth, and link hygiene. Scores every post/page 0–100.",
+        True,
+        _with_docs(run_seo_audit),
+    ),
+    "readability": ToolSpec(
+        "readability",
+        "Readability Scorecard",
+        "Flesch reading ease, sentence/paragraph length, passive-voice signals, and heading density so content is skimmable for humans and AI overviews.",
+        True,
+        _with_docs(run_readability),
+    ),
+    "link-health": ToolSpec(
+        "link-health",
+        "Link Health Checker",
+        "Inventory internal/external links and live-check HTTP URLs for broken, redirected, or timed-out destinations (capped for speed).",
+        True,
+        _with_docs(run_link_health),
+    ),
+    "schema-suggest": ToolSpec(
+        "schema-suggest",
+        "Schema / Structured Data Suggester",
+        "Detect Article, FAQPage, HowTo, and BreadcrumbList opportunities and emit reviewable JSON-LD drafts from Markdown structure.",
+        True,
+        _with_docs(run_schema_suggest),
+    ),
+    "publish-readiness": ToolSpec(
+        "publish-readiness",
+        "Publish Readiness Queue",
+        "Go-live checklist per document: blockers, warnings, SEO floor, placeholders, and a prioritized queue of drafts ready to publish.",
+        True,
+        _with_docs(run_publish_readiness),
+    ),
+    "featured-image-fixer": ToolSpec(
+        "featured-image-fixer",
+        "Featured Image Fixer",
+        "Idempotently set featured_image from the first body image, images map, or media file matching the slug; repair YAML so audits keep seeing progress.",
+        True,
+        run_featured_image_fixer,
+    ),
+}
+
+HTML_REPORT_TOOLS = {
+    "site-dashboard",
+    "seo-audit",
+    "readability",
+    "link-health",
+    "schema-suggest",
+    "publish-readiness",
+    "featured-image-fixer",
 }
 
 
@@ -143,4 +219,8 @@ def run_tool(name: str, site_key: str, target: str | None = None) -> tuple[dict[
     target_path = Path(target).resolve() if target else None
     payload = TOOLS[name].runner(site, target_path)
     report = write_report(site, f"tool-{name}", payload)
+    if name == "site-dashboard":
+        write_dashboard_html(site.key, payload, report)
+    elif name in HTML_REPORT_TOOLS - {"site-dashboard"}:
+        write_tool_html(site.key, payload, report)
     return payload, report

@@ -1,8 +1,8 @@
 ---
-title: "Salesforce pull request review: how to read metadata diffs with confidence"
+title: 'Salesforce pull request review: how to read metadata diffs with confidence'
 slug: salesforce-pull-request-metadata-review
 status: draft
-excerpt: Build salesforce pull request review skills for metadata diffs: Apex, Flow XML, permission sets, destructive changes, CODEOWNERS, checklists, and human judgment beyond green CI.
+excerpt: 'Build salesforce pull request review skills for metadata diffs: Apex, Flow XML, permission sets, destructive changes, CODEOWNERS, checklists, and human judgment beyond green CI.'
 categories:
 - release-governance
 tags:

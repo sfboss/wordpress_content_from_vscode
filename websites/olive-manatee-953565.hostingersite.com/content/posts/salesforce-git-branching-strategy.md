@@ -1,8 +1,8 @@
 ---
-title: "Salesforce git branching strategy that matches how orgs actually change"
+title: Salesforce git branching strategy that matches how orgs actually change
 slug: salesforce-git-branching-strategy
 status: draft
-excerpt: Design a salesforce git branching strategy that fits real org change: trunk-ish delivery, feature work, snapshots, hotfixes, sandbox drift, and lightweight governance.
+excerpt: 'Design a salesforce git branching strategy that fits real org change: trunk-ish delivery, feature work, snapshots, hotfixes, sandbox drift, and lightweight governance.'
 categories:
 - release-governance
 tags:

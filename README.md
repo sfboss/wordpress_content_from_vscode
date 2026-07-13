@@ -35,7 +35,7 @@ wordpress-content-factory/
 │       │   └── custom/                  # reserved for custom post types
 │       ├── media_out/                   # generated image staging; Git-ignored
 │       └── .wp-factory/                 # IDs, hashes, conflicts; Git-ignored
-└── reports/<domain>/*.json
+└── reports/<domain>/*.{json,html}       # HTML is generated for site dashboards
 ```
 
 ## Daily workflow
@@ -90,6 +90,29 @@ The filename may change without creating a duplicate because `.wp-factory/state.
 - No remote deletion, theme edits, plugin edits, or hosting filesystem access.
 
 See [summary.md](summary.md) for the exact Markdown compatibility matrix and [docs/addons.md](docs/addons.md) for safe expansion points. See [docs/tools.md](docs/tools.md) for the modular tools/plugins architecture and VS Code menu options.
+
+## Command-center SEO tools
+
+Beyond lint/plan/push, the factory ships report-first SEO jobs you can run from **Terminal → Run Task** or CLI (openable HTML dashboards):
+
+| Tool | What it does |
+| --- | --- |
+| `featured-image-fixer` | Idempotently set `featured_image` (first body image → images map → media slug match) |
+| `seo-audit` | On-page SEO score (title/meta/slug/keyphrase/H2/featured image/depth/links) |
+| `readability` | Flesch ease, long sentences, passive signals, heading density |
+| `link-health` | Live-check outbound URLs for broken/redirect/timeout (capped) |
+| `schema-suggest` | BlogPosting / FAQ / HowTo / Breadcrumb JSON-LD drafts from structure |
+| `publish-readiness` | Go-live checklist + queue of drafts ready / almost / blocked |
+
+```bash
+.venv/bin/python -m wp_factory tools run featured-image-fixer --site your-domain.com --open
+.venv/bin/python -m wp_factory tools run seo-audit --site your-domain.com --open
+.venv/bin/python -m wp_factory tools run publish-readiness --site your-domain.com --open
+```
+
+VS Code task **Factory Tools: Featured images then SEO audit** runs the fixer and immediately opens the audit for acceptance.
+
+Optional frontmatter that improves scores: `excerpt` (120–165 chars), `focus_keyword`, `featured_image`.
 
 ## Direct CLI equivalents
 

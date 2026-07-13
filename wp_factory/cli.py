@@ -4,16 +4,18 @@ import argparse
 import json
 import shutil
 import sys
+import webbrowser
 from dataclasses import asdict
 from pathlib import Path
 
 import yaml
 
 from .config import WEBSITES_DIR, list_site_keys, load_site
+from .dashboard import dashboard_html_path
 from .errors import FactoryError
 from .reporting import notify_slack, plan_dict, result_dict, write_report
 from .sync import SiteSync
-from .tools import TOOLS, list_tools, run_tool
+from .tools import HTML_REPORT_TOOLS, TOOLS, list_tools, run_tool
 
 
 def _parser() -> argparse.ArgumentParser:
@@ -33,6 +35,12 @@ def _parser() -> argparse.ArgumentParser:
     run.add_argument("tool", choices=sorted(TOOLS), help="Tool/plugin to run")
     run.add_argument("--site", required=True, help="Folder under websites/")
     run.add_argument("--target", help="Optional Markdown file or folder to process first")
+    run.add_argument(
+        "--open",
+        action="store_true",
+        dest="open_report",
+        help="Open the generated HTML report in a browser (site-dashboard, seo-audit, readability, link-health, schema-suggest, publish-readiness)",
+    )
 
     create = sub.add_parser("new-site", help="Create another domain scaffold")
     create.add_argument("domain")
@@ -129,9 +137,21 @@ def main(argv: list[str] | None = None) -> int:
             if args.tools_command == "list":
                 print(json.dumps(list_tools(), indent=2))
                 return 0
+            if args.open_report and args.tool not in HTML_REPORT_TOOLS:
+                raise FactoryError(
+                    f"--open is only available for tools with HTML reports: {', '.join(sorted(HTML_REPORT_TOOLS))}"
+                )
             payload, report = run_tool(args.tool, args.site, args.target)
-            print(json.dumps(payload, indent=2, default=str))
+            # Keep terminal output scannable for large SEO reports
+            summary = payload.get("summary") or {k: payload[k] for k in list(payload)[:6] if k not in {"documents", "links", "checks"}}
+            print(json.dumps({"tool": payload.get("tool", args.tool), "summary": summary}, indent=2, default=str))
             print(f"Report: {report.relative_to(Path.cwd()) if Path.cwd() in report.parents else report}")
+            if args.tool in HTML_REPORT_TOOLS:
+                html_report = dashboard_html_path(report)
+                if html_report.exists():
+                    print(f"Dashboard: {html_report.relative_to(Path.cwd()) if Path.cwd() in html_report.parents else html_report}")
+                    if args.open_report:
+                        webbrowser.open(html_report.resolve().as_uri())
             return 0
         ok = True
         for key in _sites(args):

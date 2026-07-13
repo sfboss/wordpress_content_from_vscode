@@ -1,7 +1,22 @@
 from pathlib import Path
 
 from wp_factory.config import MediaConfig, SiteConfig
-from wp_factory.tools import list_tools, run_image_fixer, run_internal_linker, run_site_dashboard
+from wp_factory.dashboard import write_dashboard_html
+from wp_factory.seo_tools import (
+    run_publish_readiness,
+    run_readability,
+    run_schema_suggest,
+    run_seo_audit,
+    write_tool_html,
+)
+from wp_factory.tools import (
+    HTML_REPORT_TOOLS,
+    _target_docs,
+    list_tools,
+    run_image_fixer,
+    run_internal_linker,
+    run_site_dashboard,
+)
 
 
 def make_tool_site(tmp_path: Path) -> SiteConfig:
@@ -13,12 +28,38 @@ def make_tool_site(tmp_path: Path) -> SiteConfig:
     pages.mkdir(parents=True)
     media.mkdir(parents=True)
     (media / "hero.jpg").write_bytes(b"fake")
+    long_body = (
+        "Alpha guide for salesforce source control is the daily practice teams need. "
+        "It explains how GitHub keeps configuration visible and reviewable. "
+        * 40
+    )
     (posts / "alpha.md").write_text(
-        "---\ntitle: Alpha Guide\nslug: alpha-guide\nstatus: draft\ncategories: [guides]\nimages:\n  ../media/hero.jpg:\n    alt: Helpful hero\n---\n\n# Alpha\n\nSee [Beta](/beta/). ![Hero](../media/hero.jpg)\n",
+        "---\n"
+        "title: Salesforce source control Alpha Guide\n"
+        "slug: salesforce-source-control-alpha-guide\n"
+        "status: draft\n"
+        "excerpt: Salesforce source control Alpha Guide helps teams version metadata in GitHub with a clear daily practice and recovery path.\n"
+        "focus_keyword: salesforce source control\n"
+        "categories: [guides]\n"
+        "featured_image: ../media/hero.jpg\n"
+        "images:\n"
+        "  ../media/hero.jpg:\n"
+        "    alt: Helpful hero\n"
+        "---\n\n"
+        "## Why it matters\n\n"
+        f"{long_body}\n\n"
+        "## How to start\n\n"
+        "See [Beta](/beta/) and the [Salesforce CLI docs](https://developer.salesforce.com/docs/). "
+        "![Hero](../media/hero.jpg)\n\n"
+        "## Frequently asked questions\n\n"
+        "### What is source control?\n\n"
+        "It is version history for configuration.\n\n"
+        "### Why GitHub?\n\n"
+        "Because reviews and automation live there.\n",
         encoding="utf-8",
     )
     (posts / "beta.md").write_text(
-        "---\ntitle: Beta Tutorial\nslug: beta-tutorial\nstatus: draft\n---\n\nBeta tutorial mentions Alpha Guide and external research.\n",
+        "---\ntitle: Beta Tutorial\nslug: beta-tutorial\nstatus: draft\n---\n\nBeta tutorial mentions Salesforce source control and external research.\n",
         encoding="utf-8",
     )
     (pages / "about.md").write_text("---\ntitle: About\nslug: about\n---\n\nAbout us.\n", encoding="utf-8")
@@ -40,7 +81,20 @@ def make_tool_site(tmp_path: Path) -> SiteConfig:
 
 def test_tool_registry_lists_expected_tools():
     names = {tool["name"] for tool in list_tools()}
-    assert {"image-fixer", "external-linker", "internal-linker", "site-dashboard"} <= names
+    assert {
+        "image-fixer",
+        "external-linker",
+        "internal-linker",
+        "site-dashboard",
+        "seo-audit",
+        "readability",
+        "link-health",
+        "schema-suggest",
+        "publish-readiness",
+        "featured-image-fixer",
+    } <= names
+    assert "seo-audit" in HTML_REPORT_TOOLS
+    assert "featured-image-fixer" in HTML_REPORT_TOOLS
 
 
 def test_image_fixer_can_target_one_document(tmp_path):
@@ -61,3 +115,139 @@ def test_site_dashboard_reports_baselines(tmp_path):
     payload = run_site_dashboard(site)
     assert payload["totals"]["posts"] == 2
     assert payload["baselines"]["minimum_posts"] == 25
+
+
+def test_dashboard_html_is_self_contained_and_escapes_content(tmp_path):
+    site = make_tool_site(tmp_path)
+    payload = run_site_dashboard(site)
+    payload["documents"][0]["document"] = "</script><script>alert(1)</script>"
+    report = tmp_path / "dashboard.json"
+    output = write_dashboard_html(site.key, payload, report)
+    html = output.read_text(encoding="utf-8")
+    assert output == tmp_path / "dashboard.html"
+    assert "Content depth" in html
+    assert "https://" not in html
+    assert "</script><script>alert(1)</script>" not in html
+
+
+def test_seo_audit_scores_documents(tmp_path):
+    site = make_tool_site(tmp_path)
+    docs = _target_docs(site, None)
+    payload = run_seo_audit(site, None, docs)
+    assert payload["summary"]["documents"] == 3
+    alpha = next(d for d in payload["documents"] if d["document"].endswith("alpha.md"))
+    assert alpha["score"] >= 70
+    assert alpha["focus_keyword"]
+
+
+def test_readability_reports_flesch(tmp_path):
+    site = make_tool_site(tmp_path)
+    docs = _target_docs(site, None)
+    payload = run_readability(site, None, docs)
+    assert "average_flesch" in payload["summary"]
+    assert payload["documents"]
+
+
+def test_schema_suggest_detects_faq(tmp_path):
+    site = make_tool_site(tmp_path)
+    docs = _target_docs(site, site.directory / "content" / "posts" / "alpha.md")
+    payload = run_schema_suggest(site, None, docs)
+    types = payload["documents"][0]["types"]
+    assert "BlogPosting" in types
+    assert "FAQPage" in types
+
+
+def test_publish_readiness_queues_drafts(tmp_path):
+    site = make_tool_site(tmp_path)
+    docs = _target_docs(site, None)
+    payload = run_publish_readiness(site, None, docs)
+    assert payload["summary"]["documents"] == 3
+    assert "ready" in payload["summary"]
+    assert payload["queue"]
+
+
+def test_featured_image_fixer_sets_first_image_and_is_idempotent(tmp_path):
+    from wp_factory.featured_images import fix_featured_images, load_markdown_document
+    from wp_factory.seo_tools import run_seo_audit
+
+    site = make_tool_site(tmp_path)
+    # Add a post with body image but no featured_image
+    post_path = site.directory / "content" / "posts" / "needs-hero.md"
+    (site.directory / "content" / "media" / "needs-hero-01.jpg").write_bytes(b"fake-jpg")
+    post_path.write_text(
+        "---\n"
+        "title: Needs Hero Post For Featured Image\n"
+        "slug: needs-hero-post-for-featured-image\n"
+        "status: draft\n"
+        "excerpt: Needs Hero Post For Featured Image explains how featured images get set automatically from the first local image candidate for SEO.\n"
+        "categories: [guides]\n"
+        "---\n\n"
+        "## Intro\n\n"
+        + ("Word content for depth. " * 80)
+        + "\n\n![Hero shot](../media/needs-hero-01.jpg)\n",
+        encoding="utf-8",
+    )
+
+    first = fix_featured_images(site, post_path, apply=True)
+    assert first["summary"]["updated"] == 1
+    post, _, _ = load_markdown_document(post_path)
+    assert post.metadata.get("featured_image") == "../media/needs-hero-01.jpg"
+    assert isinstance(post.metadata.get("images"), dict)
+    assert post.metadata["images"]["../media/needs-hero-01.jpg"]["alt"]
+
+    second = fix_featured_images(site, post_path, apply=True)
+    assert second["summary"]["already_ok"] == 1
+    assert second["summary"]["updated"] == 0
+
+    docs = _target_docs(site, post_path)
+    audit = run_seo_audit(site, post_path, docs)
+    row = audit["documents"][0]
+    assert row["featured_image"] is True
+    # featured-image check should pass
+    feat_check = next(c for c in row["checks"] if c["name"] == "featured-image")
+    assert feat_check["ok"] is True
+
+
+def test_featured_image_fixer_repairs_yaml_colons(tmp_path):
+    from wp_factory.featured_images import fix_featured_images, load_markdown_document
+
+    site = make_tool_site(tmp_path)
+    path = site.directory / "content" / "posts" / "colon-excerpt.md"
+    (site.directory / "content" / "media" / "colon-excerpt-01.jpg").write_bytes(b"x")
+    path.write_text(
+        "---\n"
+        "title: Colon Excerpt Demo\n"
+        "slug: colon-excerpt-demo\n"
+        "status: draft\n"
+        "excerpt: Compare paths: what works and what does not for featured images.\n"
+        "---\n\n"
+        "Body with image ![x](../media/colon-excerpt-01.jpg)\n",
+        encoding="utf-8",
+    )
+    result = fix_featured_images(site, path, apply=True)
+    assert result["summary"]["updated"] >= 1 or result["summary"]["yaml_repaired"] >= 1
+    post, _, _ = load_markdown_document(path)
+    assert post.metadata.get("featured_image")
+
+
+def test_tool_html_escapes_payload(tmp_path):
+    payload = {
+        "tool": "seo-audit",
+        "generated_at": "2026-01-01T00:00:00+00:00",
+        "summary": {"documents": 1, "average_score": 10},
+        "documents": [
+            {
+                "document": "</script><script>alert(1)</script>",
+                "title": "x",
+                "score": 10,
+                "band": "poor",
+                "focus_keyword": "x",
+                "issue_count": 1,
+                "words": 12,
+            }
+        ],
+    }
+    out = write_tool_html("site.test", payload, tmp_path / "seo.json")
+    html = out.read_text(encoding="utf-8")
+    assert "</script><script>alert(1)</script>" not in html
+    assert "SEO Audit" in html

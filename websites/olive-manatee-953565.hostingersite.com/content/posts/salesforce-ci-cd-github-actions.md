@@ -12,6 +12,10 @@ tags:
 - pipeline
 featured_image: ../media/salesforce-ci-cd-github-actions-01.jpg
 images:
+  ../media/salesforce-ci-cd-github-actions-03.jpg:
+    alt: Salesforce release timeline from pull request through sandbox to production gate
+    title: GitHub-controlled release timeline
+    caption: Artifacts and approvals mark each stage from PR to production.
   ../media/salesforce-ci-cd-github-actions-02.jpg:
     alt: Separate GitHub Actions workflows with isolated Salesforce identities and secrets
     title: Separated pipeline identities
@@ -255,7 +259,9 @@ Automate what you can with browser or API tests later. Early on, a written accep
 
 Every step leaves evidence: PR, checks, artifacts, tag, Actions run, and change record.
 
-[IMAGE PROMPT: Editorial timeline of a Salesforce release controlled by GitHub from pull request through sandbox acceptance to a production environment approval gate, with artifact icons at each stage; calm navy and soft green, 16:9]
+![Salesforce release timeline from pull request through sandbox to production gate](../media/salesforce-ci-cd-github-actions-03.jpg "GitHub-controlled release timeline")
+
+*Artifacts and approvals mark each stage from PR to production.*
 
 ## Component selection strategies for CI speed and correctness
 

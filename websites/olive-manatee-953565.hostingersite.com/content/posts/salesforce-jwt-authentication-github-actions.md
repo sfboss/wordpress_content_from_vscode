@@ -12,6 +12,14 @@ tags:
 - salesforce-authentication
 featured_image: ../media/salesforce-jwt-authentication-github-actions-01.jpg
 images:
+  ../media/salesforce-jwt-authentication-github-actions-03.jpg:
+    alt: Split view of secure GitHub Actions runner and Salesforce integration user scopes
+    title: JWT trust boundary between Actions and Salesforce
+    caption: Vaulted certificate on one side, limited integration user on the other.
+  ../media/salesforce-jwt-authentication-github-actions-02.jpg:
+    alt: JWT failure modes checklist including key, URL, user, pre-authorization, and secret issues
+    title: JWT authentication failure modes
+    caption: Most auth outages are boring configuration misses—make them easy to diagnose.
   ../media/salesforce-jwt-authentication-github-actions-01.jpg:
     alt: Salesforce JWT bearer authentication flow for GitHub Actions
     title: JWT authentication architecture
@@ -198,7 +206,9 @@ JWT setups fail in patterned ways. Teach the team the signatures.
 
 For each failure class, decide: retryable or not, who is paged, and whether the job should open an issue automatically. Silent red X’s on Actions for a week are a governance failure, not only a technical one.
 
-[IMAGE PROMPT: Checklist-style illustration of JWT failure modes—broken key icon, wrong environment URL, frozen user, missing pre-authorization, secret not in environment—arranged as a calm operations board; muted blue-gray palette, 16:9]
+![JWT failure modes checklist including key, URL, user, pre-authorization, and secret issues](../media/salesforce-jwt-authentication-github-actions-02.jpg "JWT authentication failure modes")
+
+*Most auth outages are boring configuration misses—make them easy to diagnose.*
 
 ## Logging hygiene
 
@@ -269,7 +279,9 @@ JWT auth enables automation that backs org **metadata** to a private GitHub repo
 
 Prefer starting JWT-backed automation against non-production, then promote patterns and separate production credentials under change control.
 
-[IMAGE PROMPT: Split-panel editorial image: left side shows secure GitHub Actions runner with vault icon and certificate; right side shows Salesforce org with integration user badge and limited permission scopes; professional navy and white, subtle green trust indicators, 16:9]
+![Split view of secure GitHub Actions runner and Salesforce integration user scopes](../media/salesforce-jwt-authentication-github-actions-03.jpg "JWT trust boundary between Actions and Salesforce")
+
+*Vaulted certificate on one side, limited integration user on the other.*
 
 ## Acceptance checklist before calling JWT “done”
 

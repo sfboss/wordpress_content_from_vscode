@@ -12,6 +12,10 @@ tags:
 - salesforce-metadata
 featured_image: ../media/salesforce-change-sets-vs-github-01.jpg
 images:
+  ../media/salesforce-change-sets-vs-github-03.jpg:
+    alt: Hybrid release process with Change Set exception path and GitHub system of record
+    title: Hybrid Change Set and GitHub process
+    caption: GitHub is the durable history; Change Sets remain a limited exception lane.
   ../media/salesforce-change-sets-vs-github-02.jpg:
     alt: Migration path from Salesforce sandbox baseline to GitHub reviews with Change Sets secondary
     title: Sandbox-first migration path
@@ -209,7 +213,9 @@ Choose GitHub as the system of record when multiple people change the same org, 
 
 Prefer hybrid during migration: Change Sets for production if needed, repository for history and review, non-production deploys from Git first, production from Git only after the pipeline is trusted.
 
-[IMAGE PROMPT: Checklist-style editorial graphic of a hybrid Salesforce release process with columns for Change Set exception path and GitHub system-of-record path, plus a bold note that metadata is not record data; muted navy, gray, and soft amber accents, 16:9]
+![Hybrid release process with Change Set exception path and GitHub system of record](../media/salesforce-change-sets-vs-github-03.jpg "Hybrid Change Set and GitHub process")
+
+*GitHub is the durable history; Change Sets remain a limited exception lane.*
 
 ## A week-one pilot that does not freeze delivery
 

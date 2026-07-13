@@ -12,6 +12,10 @@ tags:
 - salesforce-restore
 featured_image: ../media/restore-salesforce-metadata-from-github-01.jpg
 images:
+  ../media/restore-salesforce-metadata-from-github-02.jpg:
+    alt: Recovery branch restoring only selected Flow and permission set from known-good commit
+    title: Narrow metadata recovery branch
+    caption: Restore the failed components without erasing unrelated newer work.
   ../media/restore-salesforce-metadata-from-github-01.jpg:
     alt: Git timeline with last-known-good commit flowing through validation into Salesforce restore
     title: Restore Salesforce metadata from GitHub
@@ -98,7 +102,9 @@ Use a full-commit rollback only when the team has established that the entire ta
 
 The recovery branch should include any manifest changes, test adjustments, or temporary operational instructions needed for the deployment. Keep temporary work clearly labeled and remove it through a follow-up pull request rather than leaving mystery exceptions in the baseline.
 
-[IMAGE PROMPT: Side-by-side Git diff concept showing current branch, known-good commit, and a narrow recovery branch that restores only a Flow and permission set while preserving newer unrelated Apex work; editorial code visualization without tiny literal code, 4:3]
+![Recovery branch restoring only selected Flow and permission set from known-good commit](../media/restore-salesforce-metadata-from-github-02.jpg "Narrow metadata recovery branch")
+
+*Restore the failed components without erasing unrelated newer work.*
 
 ## Map dependencies before deploying
 

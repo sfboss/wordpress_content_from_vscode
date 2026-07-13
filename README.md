@@ -89,7 +89,7 @@ The filename may change without creating a duplicate because `.wp-factory/state.
 - Themes control fonts, widths, colors, and table CSS. The factory preserves semantic structure, not pixel-identical VS Code styling.
 - No remote deletion, theme edits, plugin edits, or hosting filesystem access.
 
-See [summary.md](summary.md) for the exact Markdown compatibility matrix and [docs/addons.md](docs/addons.md) for safe expansion points.
+See [summary.md](summary.md) for the exact Markdown compatibility matrix and [docs/addons.md](docs/addons.md) for safe expansion points. See [docs/tools.md](docs/tools.md) for the modular tools/plugins architecture and VS Code menu options.
 
 ## Direct CLI equivalents
 

@@ -12,6 +12,10 @@ tags:
 - operations
 featured_image: ../media/monitor-salesforce-github-actions-01.jpg
 images:
+  ../media/monitor-salesforce-github-actions-03.jpg:
+    alt: Weekly hygiene checklist beside GitHub Actions history with one failed job
+    title: Weekly automation hygiene review
+    caption: Failed jobs need owners. Silent green is not the only failure mode.
   ../media/monitor-salesforce-github-actions-02.jpg:
     alt: Reliability scorecard for snapshot, PR validate, and production deploy workflows
     title: Workflow reliability scorecard
@@ -391,7 +395,9 @@ Revisit duration budgets quarterly. What was fine for a pilot retrieve can miss 
 - One random failure log reviewed for secret leakage.
 - Data-track backup monitors (separate system) also green—do not let metadata comfort erase that check.
 
-[IMAGE PROMPT: Illustrated weekly hygiene checklist on a tablet next to a laptop showing GitHub Actions run history with one red failed job and a highlighted ownership avatar; soft office light, realistic style, navy accents, 16:9]
+![Weekly hygiene checklist beside GitHub Actions history with one failed job](../media/monitor-salesforce-github-actions-03.jpg "Weekly automation hygiene review")
+
+*Failed jobs need owners. Silent green is not the only failure mode.*
 
 ## Building a lightweight “pipeline status” page for stakeholders
 

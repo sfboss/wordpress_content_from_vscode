@@ -12,6 +12,14 @@ tags:
 - audit-evidence
 featured_image: ../media/salesforce-release-management-github-01.jpg
 images:
+  ../media/salesforce-release-management-github-03.jpg:
+    alt: Salesforce release train timeline with freeze, CAB, deploy, hypercare, and rollback
+    title: Release train timeline
+    caption: Development PRs, freeze, CAB, production deploy, hypercare, and an optional rollback path.
+  ../media/salesforce-release-management-github-02.jpg:
+    alt: GitHub release evidence pack with deploy id, SHA, reviewers, validation, and rollback tag
+    title: Release evidence pack
+    caption: Auditors and operators both want the same package: who approved what, from which commit.
   ../media/salesforce-release-management-github-01.jpg:
     alt: Salesforce release chain from reviewed commits to production deploy
     title: Release evidence chain in GitHub
@@ -156,7 +164,9 @@ Store the pack in the ticket, the GitHub Release body, or both. Do not rely on o
 
 You are not claiming SOC certification by organizing logs. You are making legitimate questions answerable in minutes.
 
-[IMAGE PROMPT: Clean evidence-pack mockup showing a GitHub release page beside a checklist of deploy id, SHA, reviewers, validation status, and rollback tag; professional UI illustration, cool gray and blue palette, 16:9]
+![GitHub release evidence pack with deploy id, SHA, reviewers, validation, and rollback tag](../media/salesforce-release-management-github-02.jpg "Release evidence pack")
+
+*Auditors and operators both want the same package: who approved what, from which commit.*
 
 ## Pairing with validation workflows
 
@@ -283,7 +293,9 @@ Only then attach production environment secrets and CAB integration. Teams that 
 
 Release management ships configuration. If a release includes data migrations, treat migration scripts, reconciliation queries, and data backup checkpoints as first-class plan items—not footnotes. A perfect GitHub release of metadata can still harm the business if record transforms are wrong. Keep data backup and migration runbooks linked from the release notes when relevant, and never imply that git history restores customer records.
 
-[IMAGE PROMPT: Timeline graphic of a Salesforce release train—development PRs, freeze window, CAB checkpoint, production deploy, hypercare period, and optional rollback branch—minimal flat design, navy and coral accent for hypercare, 16:9]
+![Salesforce release train timeline with freeze, CAB, deploy, hypercare, and rollback](../media/salesforce-release-management-github-03.jpg "Release train timeline")
+
+*Development PRs, freeze, CAB, production deploy, hypercare, and an optional rollback path.*
 
 ## Implementation sequence for teams starting from “we deploy manually”
 

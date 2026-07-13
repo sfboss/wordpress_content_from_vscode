@@ -12,6 +12,14 @@ tags:
 - salesforce-dx
 featured_image: ../media/salesforce-package-xml-manifest-strategy-01.jpg
 images:
+  ../media/salesforce-package-xml-manifest-strategy-03.jpg:
+    alt: Three package.xml purpose cards for snapshot, release deploy, and recovery drill
+    title: Manifests by purpose
+    caption: Snapshot coverage, release deploy, and recovery drills often need different manifests.
+  ../media/salesforce-package-xml-manifest-strategy-02.jpg:
+    alt: Checklist for testing a package.xml change through retrieve, diff, and validation
+    title: Testing a package.xml change
+    caption: Branch, retrieve, review the diff, validate deploy, then document the new scope.
   ../media/salesforce-package-xml-manifest-strategy-01.jpg:
     alt: Salesforce GitHub repository structure cutaway with manifests and workflows
     title: Repository layout for package.xml work
@@ -280,7 +288,9 @@ A manifest edit is a coverage or blast-radius change. Treat it like code.
 
 Testing is where teams learn that “we have it in Git” is not the same as “we can put it back safely.”
 
-[IMAGE PROMPT: Checklist-style editorial illustration of testing a package.xml change: branch, sandbox retrieve, diff review, validation deploy, documentation update; muted teal and charcoal palette, clean product-doc aesthetic, 4:3]
+![Checklist for testing a package.xml change through retrieve, diff, and validation](../media/salesforce-package-xml-manifest-strategy-02.jpg "Testing a package.xml change")
+
+*Branch, retrieve, review the diff, validate deploy, then document the new scope.*
 
 ## Common failure modes and how to defuse them
 
@@ -479,7 +489,9 @@ Different roles touch package.xml for different reasons:
 
 Give each role a clear way to propose scope changes without editing “the one true package.xml” in place. Separate files and a short ownership note prevent accidental cross-purpose edits. Training should include at least one hands-on session where an admin and a developer jointly review a snapshot diff and a deploy manifest for the same business change. Shared vocabulary reduces the chance that automation becomes a developer-only artifact.
 
-[IMAGE PROMPT: Calm dashboard-like composition showing three labeled package.xml cards—Snapshot coverage, Release deploy, Recovery drill—each with a short purpose line and a green “reviewed” marker; soft navy background, minimal enterprise style, 16:9]
+![Three package.xml purpose cards for snapshot, release deploy, and recovery drill](../media/salesforce-package-xml-manifest-strategy-03.jpg "Manifests by purpose")
+
+*Snapshot coverage, release deploy, and recovery drills often need different manifests.*
 
 ## Frequently asked questions
 

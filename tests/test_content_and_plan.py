@@ -41,8 +41,8 @@ def make_site(tmp_path: Path) -> SiteConfig:
     )
 
 
-def test_example_site_lints_without_failures():
-    site = load_site("example.com", require_credentials=False)
+def test_minimal_site_lints_without_failures(tmp_path):
+    site = make_site(tmp_path)
     issues = SiteSync(site).lint()
     assert not [issue for issue in issues if "warning:" not in issue]
 

@@ -12,6 +12,10 @@ tags:
 - salesforce-metadata
 featured_image: ../media/salesforce-metadata-repository-structure-01.jpg
 images:
+  ../media/salesforce-metadata-repository-structure-02.jpg:
+    alt: Layered Salesforce package directories with upward-only dependencies
+    title: Package directory dependency layers
+    caption: Platform core at the bottom; business capabilities depend upward only.
   ../media/salesforce-metadata-repository-structure-01.jpg:
     alt: Salesforce GitHub repository tree cutaway with packages, manifests, and workflows
     title: Salesforce metadata repository structure
@@ -146,7 +150,9 @@ packages/
 
 Unpackaged metadata can still use package-directory discipline. The team does not need to adopt second-generation packaging immediately to benefit from smaller ownership and validation surfaces.
 
-[IMAGE PROMPT: Dependency-layer diagram for four Salesforce package directories, with platform core at the bottom, identity and integration services above, and two business capabilities on top; arrows only upward, clean enterprise editorial style, 4:3]
+![Layered Salesforce package directories with upward-only dependencies](../media/salesforce-metadata-repository-structure-02.jpg "Package directory dependency layers")
+
+*Platform core at the bottom; business capabilities depend upward only.*
 
 ## Treat manifests as product artifacts
 

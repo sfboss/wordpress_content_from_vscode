@@ -13,6 +13,7 @@ from .config import WEBSITES_DIR, list_site_keys, load_site
 from .errors import FactoryError
 from .reporting import notify_slack, plan_dict, result_dict, write_report
 from .sync import SiteSync
+from .tools import TOOLS, list_tools, run_tool
 
 
 def _parser() -> argparse.ArgumentParser:
@@ -25,6 +26,14 @@ def _parser() -> argparse.ArgumentParser:
         target.add_argument("--all", action="store_true", help="Run every configured site")
         if name == "push":
             command.add_argument("--force", action="store_true", help="Overwrite a detected edit conflict")
+    tools = sub.add_parser("tools", help="List modular content factory tools")
+    tools_sub = tools.add_subparsers(dest="tools_command", required=True)
+    tools_sub.add_parser("list", help="Show available tools/plugins")
+    run = tools_sub.add_parser("run", help="Run one tool against a site or one content path")
+    run.add_argument("tool", choices=sorted(TOOLS), help="Tool/plugin to run")
+    run.add_argument("--site", required=True, help="Folder under websites/")
+    run.add_argument("--target", help="Optional Markdown file or folder to process first")
+
     create = sub.add_parser("new-site", help="Create another domain scaffold")
     create.add_argument("domain")
     return parser
@@ -116,6 +125,14 @@ def main(argv: list[str] | None = None) -> int:
     try:
         if args.command == "new-site":
             return _new_site(args.domain)
+        if args.command == "tools":
+            if args.tools_command == "list":
+                print(json.dumps(list_tools(), indent=2))
+                return 0
+            payload, report = run_tool(args.tool, args.site, args.target)
+            print(json.dumps(payload, indent=2, default=str))
+            print(f"Report: {report.relative_to(Path.cwd()) if Path.cwd() in report.parents else report}")
+            return 0
         ok = True
         for key in _sites(args):
             try:

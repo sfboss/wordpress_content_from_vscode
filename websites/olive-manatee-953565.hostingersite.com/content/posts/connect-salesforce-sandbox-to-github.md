@@ -12,6 +12,14 @@ tags:
 - salesforce-dx
 featured_image: ../media/connect-salesforce-sandbox-to-github-01.jpg
 images:
+  ../media/connect-salesforce-sandbox-to-github-03.jpg:
+    alt: Promotion gate from completed sandbox pilot to reviewed production access
+    title: Sandbox pilot promotion gate
+    caption: Production access waits on security, ownership, scope, and a recovery drill.
+  ../media/connect-salesforce-sandbox-to-github-02.jpg:
+    alt: Developer reviewing first Salesforce metadata baseline commit in GitHub
+    title: First baseline commit review
+    caption: Inspect scope, package.xml, and the sandbox source before you trust the history.
   ../media/connect-salesforce-sandbox-to-github-01.jpg:
     alt: Salesforce sandbox connected to a private GitHub repository for a pilot
     title: Sandbox-to-GitHub pilot connection
@@ -159,7 +167,9 @@ Baseline review checklist:
 
 Commit the baseline as a reviewed initial import with a clear message. That commit is the pilot’s “we know where we started” marker.
 
-[IMAGE PROMPT: Close-up editorial view of a developer reviewing a first Salesforce metadata baseline commit in GitHub, with a package.xml scope panel and a sandbox org badge; cool gray-blue palette, realistic but uncluttered, 4:3]
+![Developer reviewing first Salesforce metadata baseline commit in GitHub](../media/connect-salesforce-sandbox-to-github-02.jpg "First baseline commit review")
+
+*Inspect scope, package.xml, and the sandbox source before you trust the history.*
 
 ## Create a private GitHub repository and push the pilot
 
@@ -317,7 +327,9 @@ Production connection should be a separate decision with:
 
 The sandbox pilot earns the team the right to ask for production access with evidence. It is not itself production enablement.
 
-[IMAGE PROMPT: Cautionary but calm “promotion gate” illustration: sandbox pilot checklist complete on the left, production access behind a review gate labeled security, ownership, scope, and recovery drill; muted amber accents on navy, 16:9]
+![Promotion gate from completed sandbox pilot to reviewed production access](../media/connect-salesforce-sandbox-to-github-03.jpg "Sandbox pilot promotion gate")
+
+*Production access waits on security, ownership, scope, and a recovery drill.*
 
 ## A day-by-day pilot plan that stays realistic
 

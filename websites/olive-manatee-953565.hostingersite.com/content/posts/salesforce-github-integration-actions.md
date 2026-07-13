@@ -12,6 +12,10 @@ tags:
 - workflow-automation
 featured_image: ../media/salesforce-github-integration-actions-01.jpg
 images:
+  ../media/salesforce-github-integration-actions-02.jpg:
+    alt: GitHub Actions runner authenticating to a dedicated Salesforce integration user
+    title: Short-lived workflow authentication
+    caption: Encrypted secret, dedicated identity, and read-only metadata access by default.
   ../media/salesforce-github-integration-actions-01.jpg:
     alt: Salesforce GitHub Actions architecture with snapshot, validation, and deployment lanes
     title: Salesforce GitHub integration architecture
@@ -97,7 +101,9 @@ Whatever method is chosen:
 
 OIDC is often discussed as a way for GitHub Actions to avoid long-lived cloud credentials. GitHub's [OIDC reference](https://docs.github.com/en/actions/reference/security/oidc) explains how workflows obtain identity tokens for cloud providers that trust GitHub. Do not assume that pattern directly replaces Salesforce authentication unless the chosen Salesforce integration path explicitly supports it.
 
-[IMAGE PROMPT: Security-focused diagram with GitHub Actions runner requesting a short workflow session, reading an encrypted secret or signing key, authenticating to a dedicated Salesforce integration user, and receiving read-only metadata access; no literal credential values, crisp editorial vector, 4:3]
+![GitHub Actions runner authenticating to a dedicated Salesforce integration user](../media/salesforce-github-integration-actions-02.jpg "Short-lived workflow authentication")
+
+*Encrypted secret, dedicated identity, and read-only metadata access by default.*
 
 ## Give GitHub Actions the minimum repository permission
 

@@ -12,6 +12,10 @@ tags:
 - recovery
 featured_image: ../media/salesforce-metadata-vs-data-backup-01.jpg
 images:
+  ../media/salesforce-metadata-vs-data-backup-03.jpg:
+    alt: Two runbooks for metadata recovery and record restore beside a validation laptop
+    title: Separate recovery runbooks
+    caption: Metadata recovery and record restore are different procedures—keep both practiced.
   ../media/salesforce-metadata-vs-data-backup-02.jpg:
     alt: Dual-track architecture for metadata via GitHub and record data via backup vault
     title: Dual-track metadata and data protection
@@ -279,7 +283,9 @@ A healthy pilot exit criterion includes:
 
 When unsure, ask: *If this disappeared, would we restore it by deploy from git or by data restore APIs?* Let the answer pick the track.
 
-[IMAGE PROMPT: Calm operations runbook scene—two binders or digital runbooks labeled Metadata recovery and Record restore on a desk with a laptop showing a green successful drill checklist; soft daylight, professional photography style, navy accents, 16:9]
+![Two runbooks for metadata recovery and record restore beside a validation laptop](../media/salesforce-metadata-vs-data-backup-03.jpg "Separate recovery runbooks")
+
+*Metadata recovery and record restore are different procedures—keep both practiced.*
 
 ## A practical policy snippet you can adapt
 

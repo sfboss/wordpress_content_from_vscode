@@ -12,6 +12,14 @@ tags:
 - release-governance
 featured_image: ../media/salesforce-pull-request-metadata-review-01.jpg
 images:
+  ../media/salesforce-pull-request-metadata-review-03.jpg:
+    alt: Separate gates for human review, dry-run checks, sandbox acceptance, and production approval
+    title: Layered release gates after a pull request
+    caption: Human review and automation are complementary gates, not substitutes for each other.
+  ../media/salesforce-pull-request-metadata-review-02.jpg:
+    alt: Pull request review checklist covering Apex, Flow, object model, permissions, and destructive changes
+    title: Metadata PR review checklist
+    caption: Review each metadata family on its own risks, not only the green automation status.
   ../media/salesforce-pull-request-metadata-review-01.jpg:
     alt: Reviewer examining a Salesforce metadata pull request diff
     title: Salesforce pull request metadata review
@@ -175,7 +183,9 @@ CI will not tell you that a permission set is excessive. Only people and policy 
 
 Profiles often produce painful diffs and merge conflicts. If your repository still tracks profiles, budget extra review time and discourage drive-by reformatting. Permission sets are usually clearer units of intent, though large ones still need careful reading.
 
-[IMAGE PROMPT: Checklist graphic for Salesforce metadata pull request review with sections for Apex, Flow, object model, permission sets, and destructive changes; muted navy, white space, subtle red flags on permission and delete rows, 16:9]
+![Pull request review checklist covering Apex, Flow, object model, permissions, and destructive changes](../media/salesforce-pull-request-metadata-review-02.jpg "Metadata PR review checklist")
+
+*Review each metadata family on its own risks, not only the green automation status.*
 
 ## Destructive changes: read the delete path twice
 
@@ -323,7 +333,9 @@ Reviewers should know which gate they are serving. Approving a feature PR is not
 
 Salesforce’s broader DevOps direction continues to emphasize source-driven development; keep official CLI and product docs in the team library, starting from the [Salesforce CLI command reference hub](https://developer.salesforce.com/docs/platform/salesforce-cli-reference/guide/cli_reference_unified.html) for current command behavior as tools evolve.
 
-[IMAGE PROMPT: Calm process diagram linking pull request human review, automated dry-run checks, sandbox acceptance, and production approval as separate gates rather than one rubber stamp; navy and gray palette with a single green path, 16:9]
+![Separate gates for human review, dry-run checks, sandbox acceptance, and production approval](../media/salesforce-pull-request-metadata-review-03.jpg "Layered release gates after a pull request")
+
+*Human review and automation are complementary gates, not substitutes for each other.*
 
 ## Anti-patterns
 

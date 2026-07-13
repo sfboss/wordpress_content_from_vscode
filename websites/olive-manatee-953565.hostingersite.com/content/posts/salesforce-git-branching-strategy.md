@@ -12,6 +12,14 @@ tags:
 - salesforce-metadata
 featured_image: ../media/salesforce-git-branching-strategy-01.jpg
 images:
+  ../media/salesforce-git-branching-strategy-03.jpg:
+    alt: Release evidence board linking tag, PR, validation, deploy ID, and snapshot
+    title: Release evidence board
+    caption: A release is only trustworthy when the proof chain is easy to reconstruct.
+  ../media/salesforce-git-branching-strategy-02.jpg:
+    alt: Three Salesforce snapshot patterns compared with simple Git graphs
+    title: Snapshot branch patterns
+    caption: Bot commit, snapshot PR, or per-environment mirrors—pick one and document it.
   ../media/salesforce-git-branching-strategy-01.jpg:
     alt: Salesforce-oriented Git branching model with trunk, features, and snapshots
     title: Salesforce git branching model
@@ -143,7 +151,9 @@ Whatever pattern you choose, document it. The worst outcome is a repository wher
 
 Also remember: a snapshot of metadata is still not a record-data backup. Observational branches improve configuration history; they do not replace data protection products or processes.
 
-[IMAGE PROMPT: Side-by-side comparison of three snapshot patterns—bot commit to main, snapshot branch with PR, per-environment mirror refs—using simple Git graphs and short captions; restrained blue-gray palette, documentation style, 4:3]
+![Three Salesforce snapshot patterns compared with simple Git graphs](../media/salesforce-git-branching-strategy-02.jpg "Snapshot branch patterns")
+
+*Bot commit, snapshot PR, or per-environment mirrors—pick one and document it.*
 
 ## Map environments without a branch per org by default
 
@@ -428,7 +438,9 @@ If the team is still connecting its first sandbox, do not wait for a perfect ent
 
 That sequence matches how enablement usually lands: first history, then review habits, then promotion controls. Branch complexity should trail operational need by a small margin, not lead it by a year.
 
-[IMAGE PROMPT: Release evidence board concept linking a Git tag, pull request, GitHub Actions validation run, Salesforce deployment ID, and post-deploy snapshot commit; crisp enterprise illustration, deep blue and warm gray, 16:9]
+![Release evidence board linking tag, PR, validation, deploy ID, and snapshot](../media/salesforce-git-branching-strategy-03.jpg "Release evidence board")
+
+*A release is only trustworthy when the proof chain is easy to reconstruct.*
 
 ## Frequently asked questions
 

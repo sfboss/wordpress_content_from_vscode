@@ -12,6 +12,10 @@ tags:
 - salesforce-cli
 featured_image: ../media/salesforce-deployment-validation-github-actions-01.jpg
 images:
+  ../media/salesforce-deployment-validation-github-actions-02.jpg:
+    alt: Read-only PR validation credentials separate from approved production preflight secrets
+    title: Separated validation and production preflight
+    caption: Non-production validation jobs should not hold production deploy authority.
   ../media/salesforce-deployment-validation-github-actions-01.jpg:
     alt: GitHub pull request validation pipeline with Salesforce dry-run and locked production gate
     title: Salesforce deployment validation with GitHub Actions
@@ -141,7 +145,9 @@ Give the workflow's `GITHUB_TOKEN` only the access it needs. Validation usually 
 
 Keep credential material out of logs, caches, artifacts, and job summaries. Clean temporary key or authorization files even when validation fails.
 
-[IMAGE PROMPT: Security-aware validation architecture showing a read-only pull request job using non-production credentials, then a separately approved production preflight job receiving an environment secret only after review; technical editorial style, white background, 4:3]
+![Read-only PR validation credentials separate from approved production preflight secrets](../media/salesforce-deployment-validation-github-actions-02.jpg "Separated validation and production preflight")
+
+*Non-production validation jobs should not hold production deploy authority.*
 
 ## Build a validation workflow in clear stages
 

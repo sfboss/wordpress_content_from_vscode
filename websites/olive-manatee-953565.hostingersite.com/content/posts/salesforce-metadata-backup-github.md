@@ -12,6 +12,10 @@ tags:
 - salesforce-metadata
 featured_image: ../media/salesforce-metadata-backup-github-01.jpg
 images:
+  ../media/salesforce-metadata-backup-github-02.jpg:
+    alt: Baseline checklist for Salesforce metadata backup in GitHub
+    title: Metadata baseline checklist
+    caption: Define scope, retrieve, inspect, commit, test a change, then practice recovery.
   ../media/salesforce-metadata-backup-github-01.jpg:
     alt: Salesforce metadata flowing to GitHub while record data goes to a separate backup vault
     title: Metadata backup versus record backup
@@ -99,7 +103,9 @@ Add a README that identifies the source org by a non-secret label, the manifest 
 
 Then make a controlled change in the source org. Retrieve again and inspect the diff. The team should be able to point to the changed file and explain how its XML corresponds to the setup change. Reverse the change and repeat. This small exercise catches project-structure and normalization problems before production history depends on them.
 
-[IMAGE PROMPT: A calm checklist-style technical illustration showing baseline steps: define scope, retrieve, inspect secrets, commit, make test change, compare diff, recover in sandbox; white background with navy line icons and one muted green success accent, 4:3]
+![Baseline checklist for Salesforce metadata backup in GitHub](../media/salesforce-metadata-backup-github-02.jpg "Metadata baseline checklist")
+
+*Define scope, retrieve, inspect, commit, test a change, then practice recovery.*
 
 ## Schedule snapshots without manufacturing noise
 

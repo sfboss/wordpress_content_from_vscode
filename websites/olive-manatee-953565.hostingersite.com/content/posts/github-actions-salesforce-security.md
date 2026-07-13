@@ -12,6 +12,10 @@ tags:
 - secrets-management
 featured_image: ../media/github-actions-salesforce-security-01.jpg
 images:
+  ../media/github-actions-salesforce-security-02.jpg:
+    alt: GitHub protected environment gate releasing production secret only after approval
+    title: Protected environment secret gate
+    caption: Production credentials stay locked until approval, then reach one job only.
   ../media/github-actions-salesforce-security-01.jpg:
     alt: Layered security architecture for GitHub Actions and Salesforce
     title: GitHub Actions Salesforce security layers
@@ -114,7 +118,9 @@ Avoid:
 
 Materialize a key only for the step that requires it, use a temporary path, restrict permissions where supported, and remove it in an always-run cleanup step.
 
-[IMAGE PROMPT: Close-up editorial diagram of a GitHub protected environment gate; production secret remains locked before human approval, then is released only to a single deployment job and temporary runner file, which is deleted afterward; clean white background, navy and green, 4:3]
+![GitHub protected environment gate releasing production secret only after approval](../media/github-actions-salesforce-security-02.jpg "Protected environment secret gate")
+
+*Production credentials stay locked until approval, then reach one job only.*
 
 ## Set `GITHUB_TOKEN` permissions explicitly
 

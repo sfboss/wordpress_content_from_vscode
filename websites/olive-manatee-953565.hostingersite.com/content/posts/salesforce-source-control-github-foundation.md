@@ -12,6 +12,10 @@ tags:
 - source-control
 featured_image: ../media/salesforce-source-control-github-foundation-01.jpg
 images:
+  ../media/salesforce-source-control-github-foundation-02.jpg:
+    alt: Five-layer architecture from Salesforce org through GitHub controls to team runbook
+    title: Source control foundation layers
+    caption: Org, CLI project, Git history, GitHub controls, and the runbook that keeps them honest.
   ../media/salesforce-source-control-github-foundation-01.jpg:
     alt: Salesforce org connected by pipeline to a private GitHub repository
     title: Salesforce source control foundation
@@ -94,7 +98,9 @@ Retrieval success alone is not enough. The process should report the target org,
 
 Someone must own failures, access changes, dependency updates, and recovery tests. GitHub Actions can run the job, but automation does not decide whether a surprising deletion is intentional. A short runbook should say who reviews changes, how alerts are handled, when credentials are rotated, and how the workflow is disabled during an incident.
 
-[IMAGE PROMPT: Minimal five-layer architecture diagram labeled Salesforce org, Salesforce CLI project, Git commit history, GitHub controls, and team runbook; arrows show retrieval moving upward and review feedback moving downward; editorial vector style, white background, accessible contrast, 4:3]
+![Five-layer architecture from Salesforce org through GitHub controls to team runbook](../media/salesforce-source-control-github-foundation-02.jpg "Source control foundation layers")
+
+*Org, CLI project, Git history, GitHub controls, and the runbook that keeps them honest.*
 
 ## A practical adoption sequence
 

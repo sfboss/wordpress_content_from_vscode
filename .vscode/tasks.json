@@ -56,6 +56,42 @@
       "problemMatcher": []
     },
     {
+      "label": "Factory Tools: List menu",
+      "type": "shell",
+      "command": ".venv/bin/python -m wp_factory tools list",
+      "problemMatcher": []
+    },
+    {
+      "label": "Factory Tools: Image fixer (site)",
+      "type": "shell",
+      "command": ".venv/bin/python -m wp_factory tools run image-fixer --site '${input:site}'",
+      "problemMatcher": []
+    },
+    {
+      "label": "Factory Tools: External linker (site)",
+      "type": "shell",
+      "command": ".venv/bin/python -m wp_factory tools run external-linker --site '${input:site}'",
+      "problemMatcher": []
+    },
+    {
+      "label": "Factory Tools: Internal linker (site)",
+      "type": "shell",
+      "command": ".venv/bin/python -m wp_factory tools run internal-linker --site '${input:site}'",
+      "problemMatcher": []
+    },
+    {
+      "label": "Factory Tools: Site dashboard",
+      "type": "shell",
+      "command": ".venv/bin/python -m wp_factory tools run site-dashboard --site '${input:site}'",
+      "problemMatcher": []
+    },
+    {
+      "label": "Factory Tools: Run selected file with tool",
+      "type": "shell",
+      "command": ".venv/bin/python -m wp_factory tools run '${input:factoryTool}' --site '${input:site}' --target '${file}'",
+      "problemMatcher": []
+    },
+    {
       "label": "Factory: Create another site folder",
       "type": "shell",
       "command": ".venv/bin/python -m wp_factory new-site '${input:newSite}'",
@@ -80,7 +116,18 @@
       "type": "promptString",
       "description": "New domain folder (for example blog.example.com)",
       "default": "new-domain.com"
+    },
+    {
+      "id": "factoryTool",
+      "type": "pickString",
+      "description": "Tool to run against the active editor file",
+      "options": [
+        "image-fixer",
+        "external-linker",
+        "internal-linker",
+        "site-dashboard"
+      ],
+      "default": "image-fixer"
     }
   ]
 }
-

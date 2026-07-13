@@ -12,6 +12,10 @@ tags:
 - source-control
 featured_image: ../media/salesforce-org-drift-detection-git-01.jpg
 images:
+  ../media/salesforce-org-drift-detection-git-02.jpg:
+    alt: Six-step Salesforce drift detection loop with stop gate for incomplete retrieval
+    title: Drift detection loop
+    caption: Scope, retrieve, verify, compare, classify, reconcile—and stop if retrieval is incomplete.
   ../media/salesforce-org-drift-detection-git-01.jpg:
     alt: Repository and Salesforce org diverging with a Git diff bridge for drift detection
     title: Salesforce org drift detection with Git
@@ -111,7 +115,9 @@ Consider retrieving into a temporary location, validating the result, and then s
 
 Scheduled GitHub Actions workflows can run the loop. GitHub documents that schedule events run from the default branch and can be delayed during high-load periods. Its [schedule event documentation](https://docs.github.com/actions/using-workflows/events-that-trigger-workflows#schedule) should inform expectations. Add a manual trigger and monitor the age of the last successful result rather than assuming the cron entry guarantees coverage.
 
-[IMAGE PROMPT: Six-step circular drift detection loop: scope, retrieve, verify, compare, classify, reconcile; a red stop gate appears between verify and compare for partial retrievals; minimalist enterprise technical infographic, white background, accessible dark-blue text areas without tiny copy, square format]
+![Six-step Salesforce drift detection loop with stop gate for incomplete retrieval](../media/salesforce-org-drift-detection-git-02.jpg "Drift detection loop")
+
+*Scope, retrieve, verify, compare, classify, reconcile—and stop if retrieval is incomplete.*
 
 ## Classify the diff before acting
 

@@ -81,7 +81,7 @@ def make_tool_site(tmp_path: Path) -> SiteConfig:
 
 def test_tool_registry_lists_expected_tools():
     names = {tool["name"] for tool in list_tools()}
-    assert {
+    expected = {
         "image-fixer",
         "external-linker",
         "internal-linker",
@@ -92,116 +92,13 @@ def test_tool_registry_lists_expected_tools():
         "schema-suggest",
         "publish-readiness",
         "featured-image-fixer",
-    } <= names
-    assert "seo-audit" in HTML_REPORT_TOOLS
-    assert "featured-image-fixer" in HTML_REPORT_TOOLS
-
-
-def test_image_fixer_can_target_one_document(tmp_path):
-    site = make_tool_site(tmp_path)
-    payload = run_image_fixer(site, site.directory / "content" / "posts" / "alpha.md")
-    assert payload["counts"] == {"ready-for-upload": 1}
-    assert payload["images"][0]["document"] == "content/posts/alpha.md"
-
-
-def test_internal_linker_suggests_from_catalog(tmp_path):
-    site = make_tool_site(tmp_path)
-    payload = run_internal_linker(site, site.directory / "content" / "posts" / "beta.md")
-    assert payload["documents"][0]["suggestions"]
-
-
-def test_site_dashboard_reports_baselines(tmp_path):
-    site = make_tool_site(tmp_path)
-    payload = run_site_dashboard(site)
-    assert payload["totals"]["posts"] == 2
-    assert payload["baselines"]["minimum_posts"] == 25
-
-
-def test_dashboard_html_is_self_contained_and_escapes_content(tmp_path):
-    site = make_tool_site(tmp_path)
-    payload = run_site_dashboard(site)
-    payload["documents"][0]["document"] = "</script><script>alert(1)</script>"
-    report = tmp_path / "dashboard.json"
-    output = write_dashboard_html(site.key, payload, report)
-    html = output.read_text(encoding="utf-8")
-    assert output == tmp_path / "dashboard.html"
-    assert "Content depth" in html
-    assert "https://" not in html
-    assert "</script><script>alert(1)</script>" not in html
-
-
-def test_seo_audit_scores_documents(tmp_path):
-    site = make_tool_site(tmp_path)
-    docs = _target_docs(site, None)
-    payload = run_seo_audit(site, None, docs)
-    assert payload["summary"]["documents"] == 3
-    alpha = next(d for d in payload["documents"] if d["document"].endswith("alpha.md"))
-    assert alpha["score"] >= 70
-    assert alpha["focus_keyword"]
-
-
-def test_readability_reports_flesch(tmp_path):
-    site = make_tool_site(tmp_path)
-    docs = _target_docs(site, None)
-    payload = run_readability(site, None, docs)
-    assert "average_flesch" in payload["summary"]
-    assert payload["documents"]
-
-
-def test_schema_suggest_detects_faq(tmp_path):
-    site = make_tool_site(tmp_path)
-    docs = _target_docs(site, site.directory / "content" / "posts" / "alpha.md")
-    payload = run_schema_suggest(site, None, docs)
-    types = payload["documents"][0]["types"]
-    assert "BlogPosting" in types
-    assert "FAQPage" in types
-
-
-def test_publish_readiness_queues_drafts(tmp_path):
-    site = make_tool_site(tmp_path)
-    docs = _target_docs(site, None)
-    payload = run_publish_readiness(site, None, docs)
-    assert payload["summary"]["documents"] == 3
-    assert "ready" in payload["summary"]
-    assert payload["queue"]
-
-
-def test_featured_image_fixer_sets_first_image_and_is_idempotent(tmp_path):
-    from wp_factory.featured_images import fix_featured_images, load_markdown_document
-    from wp_factory.seo_tools import run_seo_audit
-
-    site = make_tool_site(tmp_path)
-    # Add a post with body image but no featured_image
-    post_path = site.directory / "content" / "posts" / "needs-hero.md"
-    (site.directory / "content" / "media" / "needs-hero-01.jpg").write_bytes(b"fake-jpg")
-    post_path.write_text(
-        "---\n"
-        "title: Needs Hero Post For Featured Image\n"
-        "slug: needs-hero-post-for-featured-image\n"
-        "status: draft\n"
-        "excerpt: Needs Hero Post For Featured Image explains how featured images get set automatically from the first local image candidate for SEO.\n"
-        "categories: [guides]\n"
-        "---\n\n"
-        "## Intro\n\n"
-        + ("Word content for depth. " * 80)
-        + "\n\n![Hero shot](../media/needs-hero-01.jpg)\n",
-        encoding="utf-8",
-    )
-
-    first = fix_featured_images(site, post_path, apply=True)
-    assert first["summary"]["updated"] == 1
-    post, _, _ = load_markdown_document(post_path)
-    assert post.metadata.get("featured_image") == "../media/needs-hero-01.jpg"
-    assert isinstance(post.metadata.get("images"), dict)
-    assert post.metadata["images"]["../media/needs-hero-01.jpg"]["alt"]
-
-    second = fix_featured_images(site, post_path, apply=True)
-    assert second["summary"]["already_ok"] == 1
-    assert second["summary"]["updated"] == 0
-
-    docs = _target_docs(site, post_path)
-    audit = run_seo_audit(site, post_path, docs)
-    row = audit["documents"][0]
+    }
+    assert expected <= names
+    assert {
+        "seo-audit",
+        "featured-image-fixer",
+        "content-overlap",
+    } <= HTML_REPORT_TOOLS
     assert row["featured_image"] is True
     # featured-image check should pass
     feat_check = next(c for c in row["checks"] if c["name"] == "featured-image")

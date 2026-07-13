@@ -134,50 +134,6 @@ def run_site_dashboard(site: SiteConfig, target: Path | None = None) -> dict[str
 def _counts(rows: list[dict[str, Any]], key: str) -> dict[str, int]:
     counts: dict[str, int] = {}
     for row in rows:
-        value = str(row.get(key, "unknown"))
-        counts[value] = counts.get(value, 0) + 1
-    return counts
-
-def _with_docs(runner):
-    """Adapt seo_tools runners that need the document list to the ToolSpec signature."""
-
-    def wrapped(site: SiteConfig, target: Path | None = None) -> dict[str, Any]:
-        docs = _target_docs(site, target)
-        return runner(site, target, docs)
-
-    return wrapped
-
-
-TOOLS = {
-    "image-fixer": ToolSpec("image-fixer", "Image Import + SEO Fixer", "Inventory local, remote, and data-uri images so each can be imported to WordPress with filename, metadata, and alt text.", True, run_image_fixer),
-    "external-linker": ToolSpec("external-linker", "External Link Assistant", "Find pages/posts that need authoritative outbound links and surface entity/keyword candidates for review.", True, run_external_linker),
-    "internal-linker": ToolSpec("internal-linker", "Internal Link Graph Assistant", "Evaluate cross-link coverage and suggest relevant local content to keep the site intertwined.", True, run_internal_linker),
-    "site-dashboard": ToolSpec("site-dashboard", "Content Factory Dashboard", "Report whole-site content KPIs, category coverage, post depth, and first-run readiness baselines.", True, run_site_dashboard),
-    "seo-audit": ToolSpec(
-        "seo-audit",
-        "On-page SEO Audit",
-        "AIOSEO-style checks: title/meta length, focus keyphrase placement, slug quality, H2 structure, featured image, depth, and link hygiene. Scores every post/page 0–100.",
-        True,
-        _with_docs(run_seo_audit),
-    ),
-    "readability": ToolSpec(
-        "readability",
-        "Readability Scorecard",
-        "Flesch reading ease, sentence/paragraph length, passive-voice signals, and heading density so content is skimmable for humans and AI overviews.",
-        True,
-        _with_docs(run_readability),
-    ),
-    "link-health": ToolSpec(
-        "link-health",
-        "Link Health Checker",
-        "Inventory internal/external links and live-check HTTP URLs for broken, redirected, or timed-out destinations (capped for speed).",
-        True,
-        _with_docs(run_link_health),
-    ),
-    "schema-suggest": ToolSpec(
-        "schema-suggest",
-        "Schema / Structured Data Suggester",
-        "Detect Article, FAQPage, HowTo, and BreadcrumbList opportunities and emit reviewable JSON-LD drafts from Markdown structure.",
         True,
         _with_docs(run_schema_suggest),
     ),

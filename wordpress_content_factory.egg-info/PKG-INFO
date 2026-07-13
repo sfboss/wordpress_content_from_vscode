@@ -14,3 +14,4 @@ Requires-Dist: PyYAML<7,>=6
 Requires-Dist: requests<3,>=2.32
 Provides-Extra: dev
 Requires-Dist: pytest<9,>=8; extra == "dev"
+Requires-Dist: pytest-cov<7,>=5; extra == "dev"

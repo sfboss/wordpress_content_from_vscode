@@ -57,23 +57,7 @@ Every run writes a JSON artifact under `reports/<site>/`, matching the existing 
 2. **Batch safe by default.** The same runner accepts no target to process the whole site.
 3. **Reports before mutation.** Tools produce findings and next steps first; future patching should be an explicit mode.
 4. **Shared content API.** Tools reuse `load_documents`, site config, reports, and image resolution instead of duplicating sync logic.
-5. **Composable jobs.** Image import, alt text, internal links, external links, SEO, readability, schema, and dashboard KPIs remain separate tasks so failures are isolated.
-
-## Tool contract
-
-A tool is registered in `wp_factory.tools.TOOLS` with a name, title, description, batch-safety flag, and runner. A runner receives `SiteConfig` plus an optional `Path` target and returns JSON-serializable data. This keeps the interface usable from CLI, VS Code tasks, tests, and a future web dashboard.
-
-SEO-oriented runners live in `wp_factory/seo_tools.py` and are registered from `tools.py`.
-
-## Optional frontmatter for stronger SEO scores
-
-These keys are optional but improve `seo-audit` and `publish-readiness`:
-
-```yaml
-excerpt: 120–165 character SERP summary with the keyphrase once
-focus_keyword: primary phrase you want the page to rank for
-# aliases also recognized: focus_keyphrase, primary_keyword, keyword
-# meta_description / seo_description also count as the SERP blurb
+5. **Composable jobs.** Image import, alt text, internal links, external links, SEO, readability, overlap detection, schema, inventory, calendar, refresh planning, and dashboard KPIs remain separate tasks so failures are isolated.
 featured_image: ../media/hero.jpg
 ```
 

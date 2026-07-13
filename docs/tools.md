@@ -13,6 +13,9 @@ Run **Terminal → Run Task** and choose:
 - **Factory Tools: External linker (site)** — identify documents that need authoritative outbound links and candidate entities/keywords.
 - **Factory Tools: Internal linker (site)** — evaluate internal links and suggest relevant posts/pages from the local content catalog.
 - **Factory Tools: Site dashboard** — generate whole-site KPI baselines and open an interactive visual dashboard.
+- **Factory Tools: Content inventory** — inventory statuses, categories, duplicate slugs/titles, thin pages, and missing metadata.
+- **Factory Tools: Editorial calendar** — build a date-driven content schedule and flag unscheduled or blocked content items.
+- **Factory Tools: Content refresh** — queue stale, undated, placeholder, or time-sensitive content for updates.
 
 ### Command-center SEO suite (All-in-One SEO-inspired)
 
@@ -34,6 +37,9 @@ Direct CLI examples:
 .venv/bin/python -m wp_factory tools list
 .venv/bin/python -m wp_factory tools run image-fixer --site example.com --target websites/example.com/content/posts/example.md
 .venv/bin/python -m wp_factory tools run site-dashboard --site example.com --open
+.venv/bin/python -m wp_factory tools run content-inventory --site example.com --open
+.venv/bin/python -m wp_factory tools run editorial-calendar --site example.com --open
+.venv/bin/python -m wp_factory tools run content-refresh --site example.com --open
 .venv/bin/python -m wp_factory tools run featured-image-fixer --site example.com --open
 .venv/bin/python -m wp_factory tools run seo-audit --site example.com --open
 .venv/bin/python -m wp_factory tools run readability --site example.com --open
@@ -61,7 +67,23 @@ Every run writes a JSON artifact under `reports/<site>/`, matching the existing 
 2. **Batch safe by default.** The same runner accepts no target to process the whole site.
 3. **Reports before mutation.** Tools produce findings and next steps first; future patching should be an explicit mode.
 4. **Shared content API.** Tools reuse `load_documents`, site config, reports, and image resolution instead of duplicating sync logic.
+<<<<<<< ours
+<<<<<<< ours
+<<<<<<< ours
+<<<<<<< ours
 5. **Composable jobs.** Image import, alt text, internal links, external links, SEO, readability, overlap detection, schema, and dashboard KPIs remain separate tasks so failures are isolated.
+=======
+5. **Composable jobs.** Image import, alt text, internal links, external links, SEO, readability, schema, inventory, calendar, refresh planning, and dashboard KPIs remain separate tasks so failures are isolated.
+>>>>>>> theirs
+=======
+5. **Composable jobs.** Image import, alt text, internal links, external links, SEO, readability, schema, inventory, calendar, refresh planning, and dashboard KPIs remain separate tasks so failures are isolated.
+>>>>>>> theirs
+=======
+5. **Composable jobs.** Image import, alt text, internal links, external links, SEO, readability, schema, inventory, calendar, refresh planning, and dashboard KPIs remain separate tasks so failures are isolated.
+>>>>>>> theirs
+=======
+5. **Composable jobs.** Image import, alt text, internal links, external links, SEO, readability, schema, inventory, calendar, refresh planning, and dashboard KPIs remain separate tasks so failures are isolated.
+>>>>>>> theirs
 
 ## Tool contract
 

@@ -744,6 +744,9 @@ def write_tool_html(site_key: str, payload: dict[str, Any], report_path: Path) -
         "schema-suggest": "Schema Suggestions",
         "publish-readiness": "Publish Readiness",
         "featured-image-fixer": "Featured Image Fixer",
+        "content-inventory": "Content Inventory",
+        "editorial-calendar": "Editorial Calendar",
+        "content-refresh": "Content Refresh",
     }.get(tool, tool)
     output.write_text(
         _HTML_SHELL.replace("__TITLE__", title).replace("__SITE__", safe_site).replace("__DATA__", safe).replace("__TOOL__", tool),

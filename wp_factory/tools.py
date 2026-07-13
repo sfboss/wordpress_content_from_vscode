@@ -9,6 +9,7 @@ from typing import Any, Callable
 
 from .config import ROOT, SiteConfig, list_site_keys, load_site
 from .content import COLLECTIONS, LOCAL_IMAGE_RE, load_documents, resolve_local_image
+from .content_overlap import run_content_overlap, write_content_overlap_html
 from .dashboard import write_dashboard_html
 from .models import Document
 from .featured_images import run_featured_image_fixer
@@ -148,6 +149,16 @@ def _with_docs(runner):
     return wrapped
 
 
+def _with_catalog(runner):
+    """Adapt tools that compare a target with the complete site catalog."""
+
+    def wrapped(site: SiteConfig, target: Path | None = None) -> dict[str, Any]:
+        docs, _issues = load_tool_documents(site)
+        return runner(site, target, docs)
+
+    return wrapped
+
+
 TOOLS = {
     "image-fixer": ToolSpec("image-fixer", "Image Import + SEO Fixer", "Inventory local, remote, and data-uri images so each can be imported to WordPress with filename, metadata, and alt text.", True, run_image_fixer),
     "external-linker": ToolSpec("external-linker", "External Link Assistant", "Find pages/posts that need authoritative outbound links and surface entity/keyword candidates for review.", True, run_external_linker),
@@ -195,6 +206,13 @@ TOOLS = {
         True,
         run_featured_image_fixer,
     ),
+    "content-overlap": ToolSpec(
+        "content-overlap",
+        "Content Overlap + Cannibalization Map",
+        "Detect near-duplicate prose and potential search-intent collisions before manual or generated long-tail pages compete with each other.",
+        True,
+        _with_catalog(run_content_overlap),
+    ),
 }
 
 HTML_REPORT_TOOLS = {
@@ -205,6 +223,7 @@ HTML_REPORT_TOOLS = {
     "schema-suggest",
     "publish-readiness",
     "featured-image-fixer",
+    "content-overlap",
 }
 
 
@@ -221,6 +240,8 @@ def run_tool(name: str, site_key: str, target: str | None = None) -> tuple[dict[
     report = write_report(site, f"tool-{name}", payload)
     if name == "site-dashboard":
         write_dashboard_html(site.key, payload, report)
+    elif name == "content-overlap":
+        write_content_overlap_html(site.key, payload, report)
     elif name in HTML_REPORT_TOOLS - {"site-dashboard"}:
         write_tool_html(site.key, payload, report)
     return payload, report

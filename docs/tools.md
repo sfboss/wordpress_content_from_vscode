@@ -23,6 +23,8 @@ Run **Terminal → Run Task** and choose:
 - **Factory Tools: Link health (site)** — live-check external/site URLs for broken, redirected, or timed-out links (capped for speed).
 - **Factory Tools: Schema suggest (site)** — detect BlogPosting, FAQPage, HowTo, and BreadcrumbList opportunities; emit reviewable JSON-LD.
 - **Factory Tools: Publish readiness (site)** — go-live checklist + prioritized queue of drafts ready / almost / blocked.
+- **Factory Tools: Content overlap map (site)** — visualize topical relationships, near-duplicate prose, and potential search-intent collisions before publishing long-tail content.
+- **Factory Tools: Check selected draft for overlap** — compare the active Markdown draft with the complete site catalog without turning the run into an all-or-nothing batch.
 
 - **Factory Tools: Run selected file with tool** — run any tool against the active editor file via VS Code `${file}`.
 
@@ -38,6 +40,8 @@ Direct CLI examples:
 .venv/bin/python -m wp_factory tools run link-health --site example.com --open
 .venv/bin/python -m wp_factory tools run schema-suggest --site example.com --open
 .venv/bin/python -m wp_factory tools run publish-readiness --site example.com --open
+.venv/bin/python -m wp_factory tools run content-overlap --site example.com --open
+.venv/bin/python -m wp_factory tools run content-overlap --site example.com --target websites/example.com/content/posts/draft.md --open
 ```
 
 ### Featured image workflow
@@ -57,7 +61,7 @@ Every run writes a JSON artifact under `reports/<site>/`, matching the existing 
 2. **Batch safe by default.** The same runner accepts no target to process the whole site.
 3. **Reports before mutation.** Tools produce findings and next steps first; future patching should be an explicit mode.
 4. **Shared content API.** Tools reuse `load_documents`, site config, reports, and image resolution instead of duplicating sync logic.
-5. **Composable jobs.** Image import, alt text, internal links, external links, SEO, readability, schema, and dashboard KPIs remain separate tasks so failures are isolated.
+5. **Composable jobs.** Image import, alt text, internal links, external links, SEO, readability, overlap detection, schema, and dashboard KPIs remain separate tasks so failures are isolated.
 
 ## Tool contract
 
@@ -75,7 +79,11 @@ focus_keyword: primary phrase you want the page to rank for
 # aliases also recognized: focus_keyphrase, primary_keyword, keyword
 # meta_description / seo_description also count as the SERP blurb
 featured_image: ../media/hero.jpg
+search_intent: informational # informational, commercial, transactional, or navigational
+content_role: cluster        # pillar, cluster, support, landing, or reference
 ```
+
+`content-overlap` derives missing focus phrases from titles, but explicit `focus_keyword`, `search_intent`, and `content_role` make its editorial recommendations clearer. Similarity is a review signal—not a Google ranking verdict and never an automatic reason to delete or redirect a page.
 
 ## Planned mutation path
 

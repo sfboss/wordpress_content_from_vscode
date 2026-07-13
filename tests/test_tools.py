@@ -1,6 +1,7 @@
 from pathlib import Path
 
 from wp_factory.config import MediaConfig, SiteConfig
+from wp_factory.content_overlap import run_content_overlap, write_content_overlap_html
 from wp_factory.dashboard import write_dashboard_html
 from wp_factory.seo_tools import (
     run_publish_readiness,
@@ -92,9 +93,11 @@ def test_tool_registry_lists_expected_tools():
         "schema-suggest",
         "publish-readiness",
         "featured-image-fixer",
+        "content-overlap",
     } <= names
     assert "seo-audit" in HTML_REPORT_TOOLS
     assert "featured-image-fixer" in HTML_REPORT_TOOLS
+    assert "content-overlap" in HTML_REPORT_TOOLS
 
 
 def test_image_fixer_can_target_one_document(tmp_path):
@@ -251,3 +254,32 @@ def test_tool_html_escapes_payload(tmp_path):
     html = out.read_text(encoding="utf-8")
     assert "</script><script>alert(1)</script>" not in html
     assert "SEO Audit" in html
+
+
+def test_content_overlap_finds_near_duplicate_and_scopes_target(tmp_path):
+    site = make_tool_site(tmp_path)
+    source = site.content_dir / "posts" / "alpha.md"
+    duplicate = site.content_dir / "posts" / "alpha-copy.md"
+    duplicate.write_text(
+        source.read_text(encoding="utf-8")
+        .replace("Salesforce source control Alpha Guide", "Salesforce source control Complete Guide")
+        .replace("salesforce-source-control-alpha-guide", "salesforce-source-control-complete-guide"),
+        encoding="utf-8",
+    )
+    docs = _target_docs(site, None)
+    payload = run_content_overlap(site, duplicate, docs)
+    assert payload["summary"]["critical"] >= 1
+    assert payload["overlaps"][0]["kind"] == "near-duplicate"
+    assert all(duplicate.relative_to(site.directory).as_posix() in {row["left"], row["right"]} for row in payload["overlaps"])
+    assert payload["task_queue"]["manual_review"]
+
+
+def test_content_overlap_html_is_self_contained_and_escapes_content(tmp_path):
+    site = make_tool_site(tmp_path)
+    payload = run_content_overlap(site, None, _target_docs(site, None))
+    payload["documents"][0]["title"] = "</script><script>alert(1)</script>"
+    output = write_content_overlap_html(site.key, payload, tmp_path / "overlap.json")
+    html = output.read_text(encoding="utf-8")
+    assert output == tmp_path / "overlap.html"
+    assert "Search-intent neighborhood" in html
+    assert "</script><script>alert(1)</script>" not in html

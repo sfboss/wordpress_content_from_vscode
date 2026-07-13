@@ -128,6 +128,18 @@
       "problemMatcher": []
     },
     {
+      "label": "Factory Tools: Content overlap map (site)",
+      "type": "shell",
+      "command": ".venv/bin/python -m wp_factory tools run content-overlap --site '${input:site}' --open",
+      "problemMatcher": []
+    },
+    {
+      "label": "Factory Tools: Check selected draft for overlap",
+      "type": "shell",
+      "command": ".venv/bin/python -m wp_factory tools run content-overlap --site '${input:site}' --target '${file}' --open",
+      "problemMatcher": []
+    },
+    {
       "label": "Factory Tools: Run selected file with tool",
       "type": "shell",
       "command": ".venv/bin/python -m wp_factory tools run '${input:factoryTool}' --site '${input:site}' --target '${file}'",
@@ -173,7 +185,8 @@
         "readability",
         "link-health",
         "schema-suggest",
-        "publish-readiness"
+        "publish-readiness",
+        "content-overlap"
       ],
       "default": "featured-image-fixer"
     }

@@ -108,52 +108,13 @@ def test_tool_registry_lists_expected_tools():
         "schema-suggest",
         "publish-readiness",
         "featured-image-fixer",
+        "content-overlap",
+        "content-inventory",
+        "content-refresh",
+        "editorial-calendar",
     }
     assert expected <= names
-    assert {
-        "seo-audit",
-        "featured-image-fixer",
-        "content-overlap",
-    } <= HTML_REPORT_TOOLS
-        "content-overlap",
-    } <= names
-    assert "seo-audit" in HTML_REPORT_TOOLS
-    assert "featured-image-fixer" in HTML_REPORT_TOOLS
-    assert "content-overlap" in HTML_REPORT_TOOLS
-
-
-
-def test_content_inventory_flags_editorial_gaps(tmp_path):
-    site = make_tool_site(tmp_path)
-    payload = run_content_inventory(site)
-    assert payload["summary"]["documents"] == 3
-    beta = next(d for d in payload["documents"] if d["document"].endswith("beta.md"))
-    assert "thin-content" in beta["flags"]
-    assert "missing-excerpt" in beta["flags"]
-
-
-def test_editorial_calendar_reports_unscheduled_blockers(tmp_path):
-    site = make_tool_site(tmp_path)
-    payload = run_editorial_calendar(site)
-    assert payload["summary"]["unscheduled"] == 3
-    beta = next(d for d in payload["calendar"] if d["document"].endswith("beta.md"))
-    assert "category" in beta["blockers"]
- 
-        "content-inventory",
-        "editorial-calendar",
-        "content-refresh",
-    } <= names
-    assert "seo-audit" in HTML_REPORT_TOOLS
-    assert "featured-image-fixer" in HTML_REPORT_TOOLS
-    assert "content-inventory" in HTML_REPORT_TOOLS
- 
-
-def test_content_refresh_prioritizes_missing_review_dates(tmp_path):
-    site = make_tool_site(tmp_path)
-    payload = run_content_refresh(site)
-    assert payload["summary"]["high"] == 3
-    assert payload["queue"][0]["priority"] == "high"
- 
+    assert {"seo-audit", "featured-image-fixer", "content-overlap"} <= HTML_REPORT_TOOLS
 
 def test_content_inventory_flags_editorial_gaps(tmp_path):
     site = make_tool_site(tmp_path)
@@ -181,63 +142,6 @@ def test_content_refresh_prioritizes_missing_review_dates(tmp_path):
     payload = run_content_refresh(site)
     assert payload["summary"]["high"] == 3
     assert payload["queue"][0]["priority"] == "high"
-
-def test_content_inventory_flags_editorial_gaps(tmp_path):
-    site = make_tool_site(tmp_path)
-    payload = run_content_inventory(site)
-    assert payload["summary"]["documents"] == 3
-    beta = next(d for d in payload["documents"] if d["document"].endswith("beta.md"))
-    assert "thin-content" in beta["flags"]
-    assert "missing-excerpt" in beta["flags"]
-
-
-def test_editorial_calendar_reports_unscheduled_blockers(tmp_path):
-    site = make_tool_site(tmp_path)
-    payload = run_editorial_calendar(site)
-    assert payload["summary"]["unscheduled"] == 3
-    beta = next(d for d in payload["calendar"] if d["document"].endswith("beta.md"))
-    assert "category" in beta["blockers"]
-        "content-inventory",
-        "editorial-calendar",
-        "content-refresh",
-    } <= names
-    assert "seo-audit" in HTML_REPORT_TOOLS
-    assert "featured-image-fixer" in HTML_REPORT_TOOLS
-    assert "content-inventory" in HTML_REPORT_TOOLS
-
-def test_content_inventory_flags_editorial_gaps(tmp_path):
-    site = make_tool_site(tmp_path)
-    payload = run_content_inventory(site)
-    assert payload["summary"]["documents"] == 4
-    beta = next(d for d in payload["documents"] if d["document"].endswith("beta.md"))
-    assert "thin-content" in beta["flags"]
-    assert "missing-excerpt" in beta["flags"]
-    gamma = next(d for d in payload["documents"] if d["document"].endswith("gamma.md"))
-    assert gamma["categories"] == ["guides", "updates"]
-    assert "missing-excerpt" not in gamma["flags"]
-
-
-def test_editorial_calendar_reports_unscheduled_blockers(tmp_path):
-    site = make_tool_site(tmp_path)
-    payload = run_editorial_calendar(site)
-    assert payload["summary"]["unscheduled"] == 3
-    assert payload["summary"]["scheduled"] == 1
-    beta = next(d for d in payload["calendar"] if d["document"].endswith("beta.md"))
-    assert "category" in beta["blockers"]
-
-
-def test_content_refresh_prioritizes_missing_review_dates(tmp_path):
-    site = make_tool_site(tmp_path)
-    payload = run_content_refresh(site)
-    assert payload["summary"]["high"] == 3
-    assert payload["queue"][0]["priority"] == "high"
-
-def test_content_refresh_prioritizes_missing_review_dates(tmp_path):
-    site = make_tool_site(tmp_path)
-    payload = run_content_refresh(site)
-    assert payload["summary"]["high"] == 3
-    assert payload["queue"][0]["priority"] == "high"
-
 def test_image_fixer_can_target_one_document(tmp_path):
     site = make_tool_site(tmp_path)
     payload = run_image_fixer(site, site.directory / "content" / "posts" / "alpha.md")

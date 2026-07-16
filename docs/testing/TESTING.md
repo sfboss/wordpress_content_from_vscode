@@ -39,3 +39,13 @@ VS Code users can run **Tests: Run Core Stability Suite**, which executes the sa
 ## Current coverage floor
 
 The repository currently enforces a conservative 30% coverage floor while the suite expands. The matrix tracks remaining core workflow gaps so coverage is not treated as a substitute for behavior coverage.
+
+## Website scaffold regression tests
+
+The multi-site onboarding flow is covered by:
+
+```bash
+python -m pytest tests/test_new_site_cli.py
+```
+
+That test exercises the public CLI boundary used by the VS Code task, verifies multiple website folders can be requested in one command, confirms `.env` is not copied into Git-tracked scaffolds, and proves a second invocation leaves existing folders unchanged.

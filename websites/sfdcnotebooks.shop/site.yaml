@@ -1,0 +1,18 @@
+site:
+  name: sfdcnotebooks.shop
+  url: https://sfdcnotebooks.shop
+  api_path: /wp-json/wp/v2
+  default_status: draft
+  timeout_seconds: 30
+  verify_public_urls: true
+content:
+  strict_alt_text: true
+  delete_remote: false
+media:
+  max_width: 1920
+  jpeg_quality: 85
+  convert_to_webp: false
+seo:
+  plugin_adapter: none
+notifications:
+  slack: optional

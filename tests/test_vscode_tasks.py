@@ -28,6 +28,7 @@ def test_run_core_stability_suite_task_is_default_test_gate():
 def test_functional_factory_tasks_reference_known_cli_commands_and_tools():
     labels_to_commands = {task['label']: task.get('command', '') for task in _tasks()}
     assert 'Factory: Run tests' not in labels_to_commands
+    assert 'Factory: Create website folder(s)' in labels_to_commands
     functional = {label: command for label, command in labels_to_commands.items() if label.startswith('Factory') and 'Setup Python' not in label and not label.startswith('Factory Tools: Featured images then')}
     allowed_commands = {'doctor', 'lint', 'plan', 'push', 'pull', 'verify', 'new-site'}
     allowed_tools = {'image-fixer', 'external-linker', 'internal-linker', 'site-dashboard', 'featured-image-fixer', 'seo-audit', 'readability', 'link-health', 'schema-suggest', 'publish-readiness', 'content-overlap'}

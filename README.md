@@ -11,7 +11,7 @@ A multi-site, Markdown-first WordPress content workspace. Each domain is one fol
 5. Put `WP_USERNAME` and `WP_APP_PASSWORD` in that site's `.env`. This is a revocable application password, not your normal wp-admin password.
 6. Optional: add a Slack Incoming Webhook URL for `#general` as `SLACK_WEBHOOK_URL`.
 7. Run the VS Code tasks in order: **Test connection → Lint Markdown → Preview sync plan → Push site → Verify live records**.
-8. Add another domain with **Factory: Create another site folder**. Repeat only steps 3–7 for it.
+8. Add one or more domains with **Factory: Create website folder(s)**. Repeat only steps 3–7 for each site. See [docs/WEBSITE_ONBOARDING.md](docs/WEBSITE_ONBOARDING.md) for the root-folder operating guide.
 
 WordPress 5.6+ includes Application Passwords and accepts them through HTTPS Basic Authentication. No OAuth/JWT plugin, Hostinger filesystem access, or paid OAuth grant is required.
 
@@ -124,6 +124,7 @@ Optional frontmatter that improves scores: `excerpt` (120–165 chars), `focus_k
 .venv/bin/python -m wp_factory pull --site example.com
 .venv/bin/python -m wp_factory verify --site example.com
 .venv/bin/python -m wp_factory plan --all
+.venv/bin/python -m wp_factory new-site example-one.com example-two.shop
 ```
 
 ## Troubleshooting

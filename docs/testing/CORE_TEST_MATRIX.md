@@ -7,7 +7,7 @@ Summary:
 - Functional VS Code tasks: 25
 - Task aliases/compositions: 2 (`Plan all sites`, `Push all sites`; plus the composed featured-image + SEO audit task)
 - Existing meaningful coverage before this pass: content loading/planning, Markdown rendering, SEO tools
-- Gaps closed in this pass: conflict-marker repair, expanded tool registry coverage, VS Code core test gate validation
+- Gaps closed in this pass: conflict-marker repair, expanded tool registry coverage, VS Code core test gate validation, multi-site scaffold creation
 
 | ID | Core capability | User entry point | VS Code task(s) | Production path | Realistic setup | Action | Required observable result | Important failure/risk | Automated test(s) | Status |
 |---|---|---|---|---|---|---|---|---|---|---|
@@ -33,7 +33,7 @@ Summary:
 | CAP-020 | Publish readiness | `tools run publish-readiness` | Factory Tools: Publish readiness | wp_factory/seo_tools.py | draft fixture | queue docs | ready/blocker summary | missed blockers | `test_publish_readiness_queues_drafts` | covered |
 | CAP-021 | Content overlap map | `tools run content-overlap` | Content overlap map, Check selected draft for overlap | wp_factory/content_overlap.py | duplicate posts | scope target | near-duplicate and review queue | cannibalization false negative | `test_content_overlap_finds_near_duplicate_and_scopes_target`, `test_content_overlap_html_is_self_contained_and_escapes_content` | covered |
 | CAP-022 | Run selected file with chosen tool | `tools run <tool> --target` | Factory Tools: Run selected file with tool | wp_factory/cli.py, wp_factory/tools.py | active Markdown path | resolve target | selected-file results | quoting/invalid tool | task validation + targeted tool tests | covered |
-| CAP-023 | Create another site scaffold | `wp_factory new-site` | Factory: Create another site folder | wp_factory/cli.py | example site scaffold | copy and rewrite config | new folder with safe domain | path traversal/overwrite | planned | planned |
+| CAP-023 | Create one or more site scaffolds | `wp_factory new-site <domain> [domain ...]` | Factory: Create website folder(s) | wp_factory/cli.py | existing configured site scaffold | copy and rewrite configs without copying `.env` | website folders with safe domains, site URLs, `.env.example`, content folders; reruns leave existing folders unchanged | path traversal/overwrite/secret copying | `tests/test_new_site_cli.py` | covered |
 | CAP-024 | Markdown rendering/media upload | internal push boundary | none direct | wp_factory/markdown_engine.py | local image fixture | render document | semantic HTML, staged image, media id | alt metadata loss | `tests/test_markdown_engine.py` | covered |
 | CAP-025 | Core stability suite task | VS Code task | Tests: Run Core Stability Suite | .vscode/tasks.json | repository root | run pytest/cov command | nonzero on failure | stale test task | `tests/test_vscode_tasks.py` | covered |
 

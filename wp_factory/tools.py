@@ -185,7 +185,6 @@ def run_content_inventory(site: SiteConfig, target: Path | None = None) -> dict[
     for doc in scoped:
         words = len(WORD_RE.findall(doc.markdown))
         cats = _categories(doc)
-        cats = _categories(doc)
         category_counts.update(str(c) for c in cats)
         status_counts.update([doc.status])
         collection_counts.update([doc.collection])
@@ -198,7 +197,6 @@ def run_content_inventory(site: SiteConfig, target: Path | None = None) -> dict[
             flags.append("uncategorized")
         if words < (800 if doc.collection == "posts" else 300):
             flags.append("thin-content")
-        if not _has_excerpt(doc):
         if not _has_excerpt(doc):
             flags.append("missing-excerpt")
         rows.append({"document": doc.key, "collection": doc.collection, "status": doc.status, "title": doc.title, "slug": doc.slug, "words": words, "categories": cats, "flags": flags})
@@ -218,7 +216,7 @@ def run_content_refresh(site: SiteConfig, target: Path | None = None) -> dict[st
             issues.append("missing-review-date")
         elif age_days is not None and age_days >= 180:
             issues.append("stale-review")
-        if re.seahttps://github.com/sfboss/wordpress_content_from_vscode/pull/1/conflict?name=wp_factory%252Ftools.py&ancestor_oid=059bc55a24e091b8f0e6eae3558f9a0bf2fda7a2&base_oid=a0a4ff328db79b97173daefa7e08fd3091f6b14d&head_oid=5ea18943db2a67ed19cd0857040430b46f73d22brch(r"\b(20[0-2][0-9]|last year|this year|recently|currently)\b", doc.markdown, re.I):
+        if re.search(r"\b(20[0-2][0-9]|last year|this year|recently|currently)\b", doc.markdown, re.I):
             issues.append("time-sensitive-language")
         if "TODO" in doc.markdown or "[UPDATE" in doc.markdown:
             issues.append("editorial-placeholder")
@@ -232,7 +230,6 @@ def run_editorial_calendar(site: SiteConfig, target: Path | None = None) -> dict
     rows = []
     for doc in _target_docs(site, target):
         planned = _meta_date(doc.metadata.get("date") or doc.metadata.get("publish_date"))
-        cats = _categories(doc)
         cats = _categories(doc)
         stage = "published" if doc.status == "publish" else "scheduled" if planned else "unscheduled"
         blockers = []
@@ -338,15 +335,7 @@ HTML_REPORT_TOOLS = {
     "schema-suggest",
     "publish-readiness",
     "featured-image-fixer",
-    "content-inventory",
-    "editorial-calendar",
-    "content-refresh",
-    "content-inventory",
-    "editorial-calendar",
-    "content-refresh",
-    "content-inventory",
-    "editorial-calendar",
-    "content-refresh",
+    "content-overlap",
     "content-inventory",
     "editorial-calendar",
     "content-refresh",

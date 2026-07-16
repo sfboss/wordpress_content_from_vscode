@@ -146,9 +146,9 @@
       "problemMatcher": []
     },
     {
-      "label": "Factory: Create another site folder",
+      "label": "Factory: Create website folder(s)",
       "type": "shell",
-      "command": ".venv/bin/python -m wp_factory new-site '${input:newSite}'",
+      "command": ".venv/bin/python -m wp_factory new-site ${input:newSites}",
       "problemMatcher": []
     },
     {
@@ -183,10 +183,10 @@
       "default": "example.com"
     },
     {
-      "id": "newSite",
+      "id": "newSites",
       "type": "promptString",
-      "description": "New domain folder (for example blog.example.com)",
-      "default": "new-domain.com"
+      "description": "One or more domain folders under websites/, separated by spaces",
+      "default": "new-domain.com another-domain.com"
     },
     {
       "id": "factoryTool",

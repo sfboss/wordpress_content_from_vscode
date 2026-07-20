@@ -95,14 +95,14 @@ See [summary.md](summary.md) for the exact Markdown compatibility matrix and [do
 
 Beyond lint/plan/push, the factory ships report-first SEO jobs you can run from **Terminal → Run Task** or CLI (openable HTML dashboards):
 
-| Tool | What it does |
-| --- | --- |
-| `featured-image-fixer` | Idempotently set `featured_image` (first body image → images map → media slug match) |
-| `seo-audit` | On-page SEO score (title/meta/slug/keyphrase/H2/featured image/depth/links) |
-| `readability` | Flesch ease, long sentences, passive signals, heading density |
-| `link-health` | Live-check outbound URLs for broken/redirect/timeout (capped) |
-| `schema-suggest` | BlogPosting / FAQ / HowTo / Breadcrumb JSON-LD drafts from structure |
-| `publish-readiness` | Go-live checklist + queue of drafts ready / almost / blocked |
+| Tool                     | What it does                                                                            |
+| ------------------------ | --------------------------------------------------------------------------------------- |
+| `featured-image-fixer` | Idempotently set`featured_image` (first body image → images map → media slug match) |
+| `seo-audit`            | On-page SEO score (title/meta/slug/keyphrase/H2/featured image/depth/links)             |
+| `readability`          | Flesch ease, long sentences, passive signals, heading density                           |
+| `link-health`          | Live-check outbound URLs for broken/redirect/timeout (capped)                           |
+| `schema-suggest`       | BlogPosting / FAQ / HowTo / Breadcrumb JSON-LD drafts from structure                    |
+| `publish-readiness`    | Go-live checklist + queue of drafts ready / almost / blocked                            |
 
 ```bash
 .venv/bin/python -m wp_factory tools run featured-image-fixer --site your-domain.com --open
@@ -126,6 +126,17 @@ Optional frontmatter that improves scores: `excerpt` (120–165 chars), `focus_k
 .venv/bin/python -m wp_factory plan --all
 .venv/bin/python -m wp_factory new-site example-one.com example-two.shop
 ```
+
+## Web UI (optional)
+
+A local dashboard under `frontend/` exposes the same VS Code tasks as a site-folder UI (pick a website, run doctor/lint/plan/push/tools, browse content, open reports):
+
+```bash
+./frontend/run.sh
+# → http://127.0.0.1:8765
+```
+
+Or **Terminal → Run Task → Factory: Open Web UI**. Details: [frontend/README.md](frontend/README.md).
 
 ## Troubleshooting
 

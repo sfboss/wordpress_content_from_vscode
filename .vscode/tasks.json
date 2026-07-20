@@ -173,6 +173,16 @@
         "isDefault": true
       },
       "problemMatcher": []
+    },
+    {
+      "label": "Factory: Open Web UI",
+      "type": "shell",
+      "command": ".venv/bin/python -m pip install -q -r frontend/requirements.txt && .venv/bin/python frontend/server.py",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
     }
   ],
   "inputs": [
